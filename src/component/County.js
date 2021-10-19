@@ -3,7 +3,7 @@ import {withStyles} from "@material-ui/core/styles";
 import { geoMercator, geoPath } from "d3-geo";
 import * as topojson from "topojson-client";
 import * as d3 from "d3";
-import county from "./data/texas-counties"
+import county from "./data/south-korea"
 
 const styles = theme => ({
     root: {
@@ -137,7 +137,7 @@ const styles = theme => ({
     }
 });
 
-class County extends Component {
+class Area extends Component {
     svgRef = React.createRef();
     zoom = {k:1,x:0,y:0};
     constructor() {
@@ -149,7 +149,7 @@ class County extends Component {
     }
 
     componentDidMount() {
-            this.setState({geographies: topojson.feature(county, county.objects['texas-counties']).features});
+            this.setState({geographies: topojson.feature(county, county.objects['skorea_provinces_2018_geo']).features});
             if (this.svgRef){
                 let svg = d3.select(this.svgRef.current);
                     // .select('g.content')
@@ -250,4 +250,4 @@ class County extends Component {
     }
 }
 
-export default withStyles(styles)(County);
+export default withStyles(styles)(Area);

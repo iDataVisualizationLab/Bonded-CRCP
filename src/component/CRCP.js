@@ -26,8 +26,8 @@ import PublishIcon from '@material-ui/icons/Publish';
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import Image from 'material-ui-image';
-import DistrictPic from '../././image/District.png';
-import CountyPic from '../././image/County.png';
+import AreaPic from '../././image/Area.jpg';
+import RegionPic from '../././image/Area.jpg';
 import TrafficOneDirectionPic from '../././image/TotalDesign Traffic.png';
 import StructureDesignCriteriaPic from '../././image/StructureDesignCriteria.png';
 import AcceptableNumberofPunchoutPic from '../././image/AcceptableNumberofPunchout.png';
@@ -50,65 +50,17 @@ import kTable from "./data/kTable.csv";
 import temperature from "./data/temperature.csv";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider/Divider";
-import County from "./County";
+import Region from "./County";
 
-// const districts = {
-//     "ABILENE": ["BORDEN", "CALLAHAN", "FISHER", "HASKELL", "HOWARD", "JONES", "KENT", "MITCHELL", "NOLAN", "SCURRY", "SHACKELFORD", "STONEWALL", "TAYLOR"],
-//     "AMARILLO": ["ARMSTRONG", "CARSON", "DALLAM", "DEAF SMITH", "GRAY", "HANSFORD", "HARTLEY", "HEMPHILL", "HUTCHINSON", "LIPSCOMB", "MOORE", "OCHILTREE", "OLDHAM", "POTTER", "RANDALL", "ROBERTS", "SHERMAN"],
-//     "ATLANTA": ["BOWIE", "CAMP", "CASS", "HARRISON", "MARION", "MORRIS", "PANOLA", "TITUS", "UPSHUR"],
-//     "AUSTIN": ["BASTROP", "BLANCO", "BURNET", "CALDWELL", "GILLESPIE", "HAYS", "LEE", "LLANO", "MASON", "TRAVIS", "WILLIAMSON"],
-//     "BEAUMONT": ["CHAMBERS", "HARDIN", "JASPER", "JEFFERSON", "LIBERTY", "NEWTON", "ORANGE", "TYLER"],
-//     "BROWNWOOD": ["BROWN", "COLEMAN", "COMANCHE", "EASTLAND", "LAMPASAS", "MCCULLOCH", "MILLS", "SAN SABA", "STEPHENS", "BRISCOE", "CHILDRESS", "COLLINGSWORTH", "COTTLE", "DICKENS", "DONLEY", "FOARD", "HALL", "HARDEMAN", "KING", "KNOX", "MOTLEY", "WHEELER"],
-//     "BRYAN": ["BRAZOS", "BURLESON", "FREESTONE", "GRIMES", "LEON", "MADISON", "MILAM", "ROBERTSON", "WALKER", "WASHINGTON"],
-//     "CORPUS CHRISTI": ["ARANSAS", "BEE", "GOLIAD", "JIM WELLS", "KARNES", "KLEBERG", "LIVE OAK", "NUECES", "REFUGIO", "SAN PATRICIO"],
-//     "DALLAS": ["COLLIN", "DALLAS", "DENTON", "ELLIS", "KAUFMAN", "NAVARRO", "ROCKWALL"],
-//     "EL PASO": ["BREWSTER", "CULBERSON", "EL PASO", "HUDSPETH", "JEFF DAVIS", "PRESIDIO"],
-//     "FORT WORTH": ["ERATH", "HOOD", "JACK", "JOHNSON", "PALO PINTO", "PARKER", "SOMERVELL", "TARRANT", "WISE"],
-//     "HOUSTON": ["BRAZORIA", "FORT BEND", "GALVESTON", "HARRIS", "MONTGOMERY", "WALLER"],
-//     "LAREDO": ["DIMMITT", "DUVAL", "KINNEY", "LA SALLE", "MAVERICK", "VAL VERDE", "WEBB", "ZAVALA"],
-//     "LUBBOCK": ["BAILEY", "CASTRO", "COCHRAN", "CROSBY", "DAWSON", "FLOYD", "GAINES", "GARZA", "HALE", "HOCKLEY", "LAMB", "LUBBOCK", "LYNN", "PARMER", "SWISHER", "TERRY", "YOAKUM"],
-//     "LUFKIN": ["ANGELINA", "HOUSTON", "NACOGDOCHES", "POLK", "SABINE", "SAN AUGUSTINE", "SAN JACINTO", "SHELBY", "TRINITY"],
-//     "ODESA": ["ANDREWS", "CRANE", "ECTOR", "LOVING", "MARTIN", "MIDLAND", "PECOS", "REEVES", "TERRELL", "UPTON", "WARD", "WINKLER"],
-//     "PARIS": ["DELTA", "FANNIN", "FRANKLIN", "GRAYSON", "HOPKINS", "HUNT", "LAMAR", "RAINS", "RED RIVER"],
-//     "PHARR": ["BROOKS", "CAMERON", "HIDALGO", "JIM HOGG", "KENEDY", "STARR", "WILLACY", "ZAPATA"],
-//     "SAN ANGELO": ["COKE", "CONCHO", "CROCKETT", "EDWARDS", "GLASSCOCK", "IRION", "KIMBLE", "MENARD", "REAGAN", "REAL", "RUNNELS", "SCHLEICHER", "STERLING", "SUTTON", "TOM GREEN"],
-//     "SAN ANTONIO": ["ATASCOSA", "BANDERA", "BEXAR", "COMAL", "FRIO", "GUADALUPE", "KENDALL", "KERR", "MCMULLEN", "MEDINA", "UVALDE", "WILSON"],
-//     "TYLER": ["ANDERSON", "CHEROKEE", "GREGG", "HENDERSON", "RUSK", "SMITH", "VAN ZANDT", "WOOD"],
-//     "WACO": ["BELL", "BOSQUE", "CORYELL", "FALLS", "HAMILTON", "HILL", "LIMESTONE", "MCLENNAN"],
-//     "WICHITA FALLS": ["ARCHER", "BAYLOR", "CLAY", "COOKE", "MONTAGUE", "THROCKMORTON", "WICHITA", "WILBARGER", "YOUNG"],
-//     "YOKUM": ["AUSTIN", "CALHOUN", "COLORADO", "DEWITT", "FAYETTE", "GONZALES", "JACKSON", "LAVACA", "MATAGORDA", "VICTORIA", "WHARTON"]
-// };
-const districts = {
-    "ABILENE": ["BORDEN", "CALLAHAN", "FISHER", "HASKELL", "HOWARD", "JONES", "KENT", "MITCHELL", "NOLAN", "SCURRY", "SHACKELFORD", "STONEWALL", "TAYLOR"],
-    "AMARILLO": ["ARMSTRONG", "CARSON", "DALLAM", "DEAF SMITH", "GRAY", "HANSFORD", "HARTLEY", "HEMPHILL", "HUTCHINSON", "LIPSCOMB", "MOORE", "OCHILTREE", "OLDHAM", "POTTER", "RANDALL", "ROBERTS", "SHERMAN"],
-    "ATLANTA": ["BOWIE", "CAMP", "CASS", "HARRISON", "MARION", "MORRIS", "PANOLA", "TITUS", "UPSHUR"],
-    "AUSTIN": ["BASTROP", "BLANCO", "BURNET", "CALDWELL", "GILLESPIE", "HAYS", "LEE", "LLANO", "MASON", "TRAVIS", "WILLIAMSON"],
-    "BEAUMONT": ["CHAMBERS", "HARDIN", "JASPER", "JEFFERSON", "LIBERTY", "NEWTON", "ORANGE", "TYLER"],
-    "BROWNWOOD": ["BROWN", "COLEMAN", "COMANCHE", "EASTLAND", "LAMPASAS", "MCCULLOCH", "MILLS", "SAN SABA", "STEPHENS"],
-    "BRYAN": ["BRAZOS", "BURLESON", "FREESTONE", "GRIMES", "LEON", "MADISON", "MILAM", "ROBERTSON", "WALKER", "WASHINGTON"],
-    "CHILDRESS":["BRISCOE","CHILDRESS","COLLINGSWORTH","COTTLE", "DICKENS","DONLEY","FOARD", "HARDEMAN","HALL","KING", "KNOX", "MOTLEY","WHEELER"],
-    "CORPUS CHRISTI": ["ARANSAS", "BEE", "GOLIAD", "JIM WELLS", "KARNES", "KLEBERG", "LIVE OAK", "NUECES", "REFUGIO", "SAN PATRICIO"],
-    "DALLAS": ["COLLIN", "DALLAS", "DENTON", "ELLIS", "KAUFMAN", "NAVARRO", "ROCKWALL"],
-    "EL PASO": ["BREWSTER", "CULBERSON", "EL PASO", "HUDSPETH", "JEFF DAVIS", "PRESIDIO"],
-    "FORT WORTH": ["ERATH", "HOOD", "JACK", "JOHNSON", "PALO PINTO", "PARKER", "SOMERVELL", "TARRANT", "WISE"],
-    "HOUSTON": ["BRAZORIA", "FORT BEND", "GALVESTON", "HARRIS", "MONTGOMERY", "WALLER"],
-    "LAREDO": ["DIMMITT", "DUVAL", "KINNEY", "LA SALLE", "MAVERICK", "VAL VERDE", "WEBB", "ZAVALA"],
-    "LUBBOCK": ["BAILEY", "CASTRO", "COCHRAN", "CROSBY", "DAWSON", "FLOYD", "GAINES", "GARZA", "HALE", "HOCKLEY", "LAMB", "LUBBOCK", "LYNN", "PARMER", "SWISHER", "TERRY", "YOAKUM"],
-    "LUFKIN": ["ANGELINA", "HOUSTON", "NACOGDOCHES", "POLK", "SABINE", "SAN AUGUSTINE", "SAN JACINTO", "SHELBY", "TRINITY"],
-    "ODESA": ["ANDREWS", "CRANE", "ECTOR", "LOVING", "MARTIN", "MIDLAND", "PECOS", "REEVES", "TERRELL", "UPTON", "WARD", "WINKLER"],
-    "PARIS": ["DELTA", "FANNIN", "FRANKLIN", "GRAYSON", "HOPKINS", "HUNT", "LAMAR", "RAINS", "RED RIVER"],
-    "PHARR": ["BROOKS", "CAMERON", "HIDALGO", "JIM HOGG", "KENEDY", "STARR", "WILLACY", "ZAPATA"],
-    "SAN ANGELO": ["COKE", "CONCHO", "CROCKETT", "EDWARDS", "GLASSCOCK", "IRION", "KIMBLE", "MENARD", "REAGAN", "REAL", "RUNNELS", "SCHLEICHER", "STERLING", "SUTTON", "TOM GREEN"],
-    "SAN ANTONIO": ["ATASCOSA", "BANDERA", "BEXAR", "COMAL", "FRIO", "GUADALUPE", "KENDALL", "KERR", "MCMULLEN", "MEDINA", "UVALDE", "WILSON"],
-    "TYLER": ["ANDERSON", "CHEROKEE", "GREGG", "HENDERSON", "RUSK", "SMITH", "VAN ZANDT", "WOOD"],
-    "WACO": ["BELL", "BOSQUE", "CORYELL", "FALLS", "HAMILTON", "HILL", "LIMESTONE", "MCLENNAN"],
-    "WICHITA FALLS": ["ARCHER", "BAYLOR", "CLAY", "COOKE", "MONTAGUE", "THROCKMORTON", "WICHITA", "WILBARGER", "YOUNG"],
-    "YOKUM": ["AUSTIN", "CALHOUN", "COLORADO", "DEWITT", "FAYETTE", "GONZALES", "JACKSON", "LAVACA", "MATAGORDA", "VICTORIA", "WHARTON"]
+const regions = {
+    "1": ['고산', '성산', '서귀포', '제주', '흑산도', '진도군', '완도', '여수', '울릉도', '통영', '보성군', '거제', '목포', '고흥', '광양시', '북창원', '남해', '장흥'],
+    "2": ['부산', '강진군', '양산시', '백령도', '김해시', '광주', '동해', '순천', '보령', '해남', '창원', '울진', '군산', '포항', '울산', '산청', '영광군', '경주시', '대구', '의령군', '구미', '북강릉', '고창군', '진주', '정읍', '고창', '홍성', '함양군', '강릉', '추풍령', '전주', '상주', '순창군', '해주', '밀양', '영덕', '용연', '속초', '인천', '부안', '장전', '영천', '문경', '거창', '서산', '합천', '김책', '남포', '청진', '대전', '원산', '사리원', '청주', '남원', '개성', '태백', '평양', '수원', '강화', '선봉', '청송군', '서울', '안주', '신의주', '부여', '영주', '함흥', '신포', '안동', '임실', '정선군', '장수', '원주', '신계'],
+    "3": ['보은', '금산', '천안', '충주', '대관령', '양평', '파주', '북춘천', '인제', '수풍', '이천', '영월', '희천', '의성', '평강', '춘천', '구성', '동두천', '제천', '봉화', '풍산', '양덕', '철원', '홍천', '강계', '장진', '삼지연', '중강', '혜산'],
 };
-const districtCode = {"ABILENE":"ABL","AMARILLO":"AMA","ATLANTA":"ATL","AUSTIN":"AUS","BEAUMONT":"BMT","BRYAN":"BRY","BROWNWOOD":"BWD","CORPUS CHRISTI":"CRP","CHILDRESS":"CHS","DALLAS":"DAL","EL PASO":"ELP","FORT WORTH":"FTW","HOUSTON":"HOU","LUBBOCK":"LBB","LUFKIN":"LFK","LAREDO":"LRD","ODESA":"ODA","PARIS":"PAR","PHARR":"PHR","SAN ANTONIO":"SAT","SAN ANGELO":"SJT","TYLER":"TYL","WACO":"WAC","WICHITA FALLS":"WFS","YOKUM":"YKM"};
+
 const counties = {};
-Object.keys(districts).forEach(key => {
-    districts[key].forEach(c => counties[c] ? counties[c].push(key) : counties[c] = [key])
+Object.keys(regions).forEach(key => {
+    regions[key].forEach(c => counties[c] ? counties[c].push(key) : counties[c] = [key])
 });
 const highway = ["IH 45", "US 290", "IH 30", "US 59", "IH 35W", "IH 820", "IH 10", "IH 40", "IH 35", "US 287", "US 81", "IH 27", "SL 289", "SH 226", "SH 36", "US 83B", "VA", "FM 3129", "IH 20", "US 71", "US 79", "US 47", "US 67", "BU90-Y", "CS", "FM 1960", "FM 364", "FM 365", "SH 347", "SH 105", "SH 12", "SH 124", "SH 146", "SH 326", "SH 61", "SH 73", "SH 87", "SS 380", "US 90", "US 69", "US 96", "BS6-R", "SH 21", "BW 8", "US 83", "BS 121H", "FM 1171", "FM 1382", "FM 2499", "FM 709", "FM 740", "IH 35E", "IH4 5", "IH 635", "LP 12", "LP 354", "MH", "SH 289", "SH 31", "SH 66", "SH 78", "SH 114", "SH 121", "SH 161", "SH 180", "SH 183", "SH 310", "SH 34", "SH 342", "SH 356", "SL 12", "SL 288", "SP 244", "SP 348", "SP 366", "SPUR 354", "US 175", "US 380", "US 75", "US 77", "US 377", "US 80", "US 54", "BU 287P", "FM 157", "IH 820 ", "SH 199", "SH 26", "SH 360", "FM 1764", "FM 523", "FM 1092", "FM 1488", "FM 518", "IH 610", "SH 288", "SH 332", "SH 225", "SH 242", "SH 249", "SH 35", "US 90A", "IH27", "SH 7", "FM 1472", "LP 20", "ODA 181-1", "ODA 181-2", "ODA 250-1", "ODA 250-2", "US 82", "SH 6", "FM 85", "LP 281", "LP 323", "SH 19", "SH 198", "SH 334", "US 259", "US 281", "FM 1695", "FM 3476", "FM 933", "IH 36", "LP 363", "SH 195", "US 84", "BU 287J", "IH 44", "SH 240", "SP 1027 ", "US 287 ", "US 55", "US 70", "SH 71"];
 // const baseType = ["CTB", "HMA Base"];
@@ -175,11 +127,12 @@ const init = {
     activeStep: 0,
     stepsLength: 3,
     finished: false,
-    DesignLife: 30,
-    PunchoutsPerMile: 10,
+    DesignLife: 20,
+    PunchoutsPerMile: 6,
     LanesOneDirection: 2,
-    TrafficOneDirection: 100,
-    ModulusOfRupture: 570,
+    TrafficOneDirection: 60,
+    ModulusOfRupture: 4,
+    SlabThickness: 25,
     ElasticModulue: 5,
     SoilClassificationSystem:'USCS',
     SoilSub:"CH",
@@ -187,18 +140,18 @@ const init = {
     SubbaseType:"LTS",
     SubbaseThickness:12,
     BaseType:'',
-    BaseThickness: 6,
-    BaseThicknessMin: 6,
+    BaseThickness: 15,
+    BaseThicknessMin: 0,
+    BaseThicknessMax: 15,
     ModulusBase : 400,
     CompositeK: 539,
-    District: null,
-    County: null,
+    Area: null,
+    Region: null,
     Highway: null,
-    ProjectScope: null,
     StationBegin: null,
     StationEnd: null,
-    currentDistricts: Object.keys(districts),
-    currentCounties: Object.keys(counties),
+    currentAreas: Object.keys(counties),
+    currentRegions: Object.keys(regions),
     SubbaseThicknessThreshHold:-1,
     SubbaseTypeOpt:['Cement treated subgrade',
         'Lime treated subgrade',
@@ -244,133 +197,154 @@ class CRCP extends Component {
     }
     computeStress = (SlabThickness)=>{ // F7
         let input = {
-            H: {Input:SlabThickness,"L Bound":0, "U Bound":0},
-            K: {Input:this.state.CompositeK,"L Bound":0, "U Bound":0}
+            Region: {Input:this.state.Region},
+            H1: {Input:SlabThickness,"L Bound":0, "H Bound":0},
+            K: {Input:this.state.CompositeK,"L Bound":0, "H Bound":0},
+            'MR Des': {Input:5},
+            'ESALs': {Input:this.state.TrafficOneDirection},
+            'FD': {Input:48},
+            'PO': {Input:0},
+            'STR': {Input:0},
+            'MR Inp': {Input:this.state.ModulusOfRupture,"L Bound":0},
         }
-        input.H["L Bound"] = (input.H.Input>=15.5)?15.5:((input.H.Input<6.5)?6:Math.floor(input.H.Input*2)/2);
-        input.H["U Bound"] = (input.H.Input>=15.5)?16:((input.H.Input<6.5)?6.5:Math.ceil(input.H.Input*2+1)/2);
-        const B3 = input.K.Input;
-        input.K["L Bound"] = (B3<100?50:(B3<300?100:(B3<500?300:(B3<700?500:(B3<1000?700:(B3<1300?1000:(B3>=1300?1300:0)))))));
-        input.K["U Bound"] = (B3<100?100:(B3<300?300:(B3<500?500:(B3<700?700:(B3<1000?1000:(B3<1300?1300:(B3>=1300?1600:0)))))));
-        const mapd2 = {};
-        let lastd2 = {index:1,DT:0,H:0,K:0,STR_T:0,STR_E:0};
+        debugger
+        let B3 = input.H1.Input;
+        input.H1["L Bound"] = (B3>25)?25:((B3>30)?30:35);
+        input.H1["H Bound"] = (B3<=25)?25:((B3<=30)?30:35);
+        let B4 = input.K.Input;
+        input.K["L Bound"] = (B4>1000)?1000:((B4>500)?500:100);
+        input.K["H Bound"] = (B4<=100)?100:((B4<=500)?500:1000);
+        let B7 = input.FD.Input;
+        input.PO.Input = Math.round(29.379/(1+(603*(Math.pow(B7,-1.3054)))),0);
+        let B5 = input['MR Des'].Input;
+        let B6 = input['ESALs'].Input;
+        input.STR.Input = Math.round((B5/(Math.pow(B6/48/225000,0.25)))*100)/100;
+        let B10 = input['MR Inp'].Input;
+        input['MR Inp']['L Bound'] = -2*B10+10;
+
+
+        let data2 = [];
+        const Region = input.Region.Input;
+        const mapSSTable = {}
         this.state.ssTable.forEach(s=>{
-            const B2 = +s["Thickness of Concrete Layer (in.)"];
-            const A2 = +s["Temperature Change (F)"];
-            const C2 = +s["Composite K (psi/in.)"];
-            const D2 = +s["Concrete Stress (T) (psi)"];
-            const E2 = +s["Concrete Stress (E) (psi)"];
+            const A2 = s["Region"];
+            const B2 = +s["Thickness of Existing Concrete"];
+            const C2 = +s["Composite K"];
+            const D2 = +s["Thickness of CRCP Overlay"];
+            const E2 = s["ID"];
+            const F2 = +s["max ESALs"];
 
-            const DT = ((B2-input.H["L Bound"])*(B2-input.H["U Bound"]))===0?((C2-input.K["L Bound"])*(C2-input.K["U Bound"])===0?A2:0):0;
-            const H = ((B2-input.H["L Bound"])*(B2-input.H["U Bound"]))===0?((C2-input.K["L Bound"])*(C2-input.K["U Bound"])===0?B2:0):0;
-            const K = ((B2-input.H["L Bound"])*(B2-input.H["U Bound"]))===0?((C2-input.K["L Bound"])*(C2-input.K["U Bound"])===0?C2:0):0;
-            const STR_T = ((B2-input.H["L Bound"])*(B2-input.H["U Bound"]))===0?((C2-input.K["L Bound"])*(C2-input.K["U Bound"])===0?D2:0):0;
-            const STR_E = ((B2-input.H["L Bound"])*(B2-input.H["U Bound"]))===0?((C2-input.K["L Bound"])*(C2-input.K["U Bound"])===0?E2:0):0;
-            const index = DT===0?(lastd2.DT===0?lastd2.index:lastd2.index+1):(lastd2.DT===0?lastd2.index:lastd2.index+1);
-            mapd2[index] = {index,DT,H,K,STR_T,STR_E};
-            lastd2 = {index,DT,H,K,STR_T,STR_E};
+            const G2 = Math.round((input['MR Des'].Input/Math.pow((F2/48)/225000,0.25) )*100)/100;// stress
+            mapSSTable[E2] = {A2,B2,C2,D2,E2,F2,G2};
         });
 
-        const data3 = [];
-        for (let i = 1;i<25;i++) {
-            const index = Math.floor((i-1)/4)*4 + 1;
-            const DT = mapd2[index].DT;
-            const H = mapd2[Math.floor((i-1)/2)*2 + 1].H;
-            const {K,STR_T,STR_E} = mapd2[i];
-            data3.push({DT,H,K,STR_T,STR_E})
-        }
-        const data4 = [];
-        for (let i = 0;i<12;i++) {
-            const Q2 = data3[i*2].STR_T;
-            const Q3 = data3[i*2+1].STR_T;
-            const R2 = data3[i*2].STR_E;
-            const R3 = data3[i*2+1].STR_E;
-            const STR_T = ((Q3-Q2)*input.K.Input+(Q2*input.K['U Bound']-Q3*input.K['L Bound']))/(input.K['U Bound']-input.K['L Bound']);
-            const STR_E = ((R3-R2)*input.K.Input+(R2*input.K['U Bound']-R3*input.K['L Bound']))/(input.K['U Bound']-input.K['L Bound']);
-            data4.push({STR_T,STR_E})
-        }
-        const data5 = [];
-        for (let i = 0;i<6;i++) {
-            const W2 = data4[i*2].STR_T;
-            const W4 = data4[i*2+1].STR_T;
-            const X2 = data4[i*2].STR_E;
-            const X4 = data4[i*2+1].STR_E;
-            const STR_T = ((W4-W2)*input.H.Input+(W2*input.H['U Bound']-W4*input.H['L Bound']))/(input.H['U Bound']-input.H['L Bound']);
-            const STR_E = ((X4-X2)*input.H.Input+(X2*input.H['U Bound']-X4*input.H['L Bound']))/(input.H['U Bound']-input.H['L Bound']);
-            data5.push({STR_T,STR_E})
-        }
-        const districtemp = this.state.temperature.filter(d=>d.District===districtCode[this.state.District]);
-        const stress = districtemp.map((t,ti)=>{
-            const AveragetTemperature = +t['Average Temperature (F)'];
-            const DT = 120-AveragetTemperature;
-            const H = input.H.Input;
-            const K = input.K.Input;
-            const STR_T = getSTR_T(DT);
-            const STR_E = getSTR_E(DT);
-            if(ti===3)
-                debugger
-            return {'District':this.state.District,'Month':ti+1,'Average Temperature':AveragetTemperature,
-                DT,H,K,'STR (T)':STR_T,'STR (E)':STR_E}
+        const I = [10,15,20];
+        const H = [input.K['L Bound'],input.K['H Bound']];
+        [input.H1['L Bound'],input.H1['H Bound']].forEach(H1=>{
+            H.forEach(Comp_K=>{
+                I.forEach(H2=>{
+                    const ID =  `${Region}${H1}${Comp_K}${H2}`;
+                    const ESALs = mapSSTable[ID].F2;
+                    const STR = mapSSTable[ID].G2;
+                    data2.push({Comp_K,ESALs,STR});
+                })
+            })
         });
 
-        function getSTR_T(DT){
-            if (DT>=95)
-                return (data5[5].STR_T-data5[4].STR_T)/(data3[20].DT-data3[16].DT)*(DT-data3[20].DT)+data5[5].STR_T;
-            if ((DT>=65)&&(DT<95))
-                return (data5[5].STR_T-data5[4].STR_T)/(data3[20].DT-data3[16].DT)*(DT-data3[16].DT)+data5[4].STR_T;
-            if ((DT>=35)&&(DT<65))
-                return (data5[4].STR_T-data5[3].STR_T)/(data3[16].DT-data3[12].DT)*(DT-data3[12].DT)+data5[3].STR_T;
-            if ((DT>=5)&&(DT<35))
-                return (data5[3].STR_T-data5[2].STR_T)/(data3[12].DT-data3[8].DT)*(DT-data3[8].DT)+data5[2].STR_T;
-            if((DT>=-25) && (DT<5))
-                return (data5[2].STR_T-data5[1].STR_T)/(data3[8].DT-data3[4].DT)*(DT-data3[4].DT)+data5[1].STR_T;
-            if((DT>=-55)&& (DT<-25))
-                return (data5[1].STR_T-data5[0].STR_T)/(data3[4].DT-data3[0].DT)*(DT-data3[0].DT)+data5[0].STR_T;
-            return (data5[1].STR_T-data5[0].STR_T)/(data3[4].DT-data3[0].DT)*(DT-data3[0].DT)+data5[0].STR_T;
+        const jump = H.length*I.length;
+        const jump2 = I.length;
+        let data3 = [];
+        [input.H1['L Bound'],input.H1['H Bound']].forEach((H1,j)=>{
+            [input.K.Input].forEach(Comp_K=>{
+                I.forEach((_H2,i)=>{
+                    const K2 = data2[j*jump + i].ESALs;
+                    const K5 = data2[j*jump + jump2 + i].ESALs;
+                    const H2 = data2[j*jump + i].Comp_K;
+                    const H5 = data2[j*jump + jump2 + i].Comp_K;
+                    const L2 = data2[j*jump + i].STR;
+                    const L5 = data2[j*jump + jump2 + i].STR;
+                    const Q2 = Comp_K;
+                    const ESALs =((K2-K5)*Q2+(K5*H2-H5*K2))/(H2-H5);
+                    const STR = ((L2-L5)*Q2+(L5*H2-H5*L2))/(H2-H5);
+                    data3.push({Comp_K,H1,ESALs,STR});
+                })
+            })
+        });
+        let data4 = [];
+        [input.H1.Input].forEach((H1)=>{
+            [input.K.Input].forEach(Comp_K=>{
+                I.forEach((H2,i)=>{
+                    const S2 = data3[i].ESALs;
+                    const S8 = data3[jump2 + i].ESALs;
+                    const P2 = data3[i].H1;
+                    const P8 = data3[jump2 + i].H1;
+                    const T2 = data3[i].STR;
+                    const T8 = data3[jump2 + i].STR;
+                    const X2 = H1;
+                    const ESALs =((S2-S8)*X2+(S8*P2-P8*S2))/(P2-P8);
+                    const STR = ((T2-T8)*X2+(T8*P2-P8*T2))/(P2-P8);
+                    const ID = `${Region}${H1}${Comp_K}${ESALs}`;
+                    const LN = Math.log(ESALs);
+                    data4.push({Comp_K,ESALs,H2,STR,ID,LN});
+                })
+            })
+        });
+        function linearRegression(y,x){
+            var lr = {}; var n = y.length; var sum_x = 0; var sum_y = 0; var sum_xy = 0; var sum_xx = 0; var sum_yy = 0;
+
+            for (var i = 0; i < y.length; i++) {
+                sum_x += x[i];
+                sum_y += y[i];
+                sum_xy += (x[i]*y[i]);
+                sum_xx += (x[i]*x[i]);
+                sum_yy += (y[i]*y[i]);
+            }
+
+            lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+            lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+            lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
+
+            return lr;
         }
-        function getSTR_E(DT){
-            if (DT>=95)
-                return (data5[5].STR_E-data5[4].STR_E)/(data3[20].DT-data3[16].DT)*(DT-data3[20].DT)+data5[5].STR_E;
-            if ((DT>=65)&&(DT<95))
-                return (data5[5].STR_E-data5[4].STR_E)/(data3[20].DT-data3[16].DT)*(DT-data3[16].DT)+data5[4].STR_E;
-            if ((DT>=35)&&(DT<65))
-                return (data5[4].STR_E-data5[3].STR_E)/(data3[16].DT-data3[12].DT)*(DT-data3[12].DT)+data5[3].STR_E;
-            if ((DT>=5)&&(DT<35))
-                return (data5[3].STR_E-data5[2].STR_E)/(data3[12].DT-data3[8].DT)*(DT-data3[8].DT)+data5[2].STR_E;
-            if((DT>=-25) && (DT<5))
-                return (data5[2].STR_E-data5[1].STR_E)/(data3[8].DT-data3[4].DT)*(DT-data3[4].DT)+data5[1].STR_E;
-            if((DT>=-55)&& (DT<-25))
-                return (data5[1].STR_E-data5[0].STR_E)/(data3[4].DT-data3[0].DT)*(DT-data3[0].DT)+data5[0].STR_E;
-            return (data5[1].STR_E-data5[0].STR_E)/(data3[4].DT-data3[0].DT)*(DT-data3[0].DT)+data5[0].STR_E;
-        }
-        // for (let i = 0;i<12;i++) {
-        //     const item = {'District'	'Month'	'Average' 'Temperature'	DT	H	K	STR (T)	STR (E)}
-        // }
-        // this.setState({data: stress});
-        return stress;
+        let lr = linearRegression(data4.map(d=>d.LN),data4.map(d=>d.H2));
+        const W19 = lr.slope;
+        const X19 = lr.intercept;
+        let data5 = {Region,H1:input.H1.Input,Comp_K:input.K.Input,'Input_ESALs':input.ESALs.Input,'Input_STR':input.STR.Input};
+        data5.ID = `${data5.Region}${data5.H1}${data5.Comp_K}${data5.Input_ESALs}`;
+
+        const _lookup = data4.find(d=>d.ID===data5.ID);
+        data5.H2 = Math.round(((_lookup??{H2:((Math.log(data5['Input_ESALs']))-X19)/W19}).H2+input['MR Inp']['L Bound'])*10)/10;
+
+        return data5.H2;
     }
     recompute = ()=>{
-        let __ret = {};
-        let i = 7;
-        for (i=7;i<16;i++) {
-            __ret = this.analysis(i);
-            console.log(__ret.rows[__ret.r][12])
-            if(__ret.rows[__ret.r][12]<=this.state.PunchoutsPerMile)
-                break;
-        }
-        let rowIndexStress = __ret.rowIndexStress;
-        let row1 = __ret.row1;
-        const rows = __ret.rows;
-        var r = __ret.r;
-        this.props.AnalysisPunchouts(rows[r][12]);
-        // this.props.AnalysisSlabThickness(Math.min(13,i));
-        this.props.AnalysisSlabThickness(Math.min(i,15));
-        this.setState({row1,rows,rowIndexStress})
+        // let __ret = {};
+        // let i = 25;
+        // for (i=25;i<=35;i++) {
+        //     __ret = this.analysis(i);
+        //     console.log(__ret.rows[__ret.r][12])
+        //     if(__ret.rows[__ret.r][12]<=this.state.PunchoutsPerMile)
+        //         break;
+        // }
+        // let rowIndexStress = __ret.rowIndexStress;
+        // let row1 = __ret.row1;
+        // const rows = __ret.rows;
+        // var r = __ret.r;
+        // this.props.AnalysisPunchouts(rows[r][12]);
+        // // this.props.AnalysisSlabThickness(Math.min(13,i));
+        // this.props.AnalysisSlabThickness(Math.min(i,15));
+        // this.setState({row1,rows,rowIndexStress})
+
+
+        // new
+        const AnalysisSlabThickness = this.computeStress(this.state.SlabThickness);
+        this.props.AnalysisSlabThickness(AnalysisSlabThickness);
+        this.setState({JCPC:this.state.SlabThickness-AnalysisSlabThickness})
     };
 
     analysis(slabthickness) {
         const data = this.computeStress(slabthickness);
-        console.log(data)
+
         let rowIndexStress = 8;
         let row1 = [];
         const rows = [];
@@ -437,7 +411,6 @@ class CRCP extends Component {
             }
         }
         var r = 12 * this.state.DesignLife - 1;
-        console.log(rows)
         return {rowIndexStress, row1, rows, r};
         function lane(n) {
             if (n <= 2)
@@ -484,38 +457,14 @@ class CRCP extends Component {
     handleReset = () => {
         this.setState({...init});
     };
-    onLoadInput = (event) =>{
-        const self = this;
-        var reader = new FileReader();
-        reader.addEventListener("load", parseFile, false);
-        if (event.target.files[0]) {
-            debugger
-            reader.readAsText(event.target.files[0]);
-        }
 
-        function parseFile(){
-            let loaded = false;
-            var data = JSON.parse(reader.result);
-            loaded = true;
-            const currentState = JSON.stringify(self.state);
-            try{
-                self.setState(data);
-                event.target.value = ''
-            }catch(e){
-                window.alert("Can't read file. Please check format!")
-                if(loaded)
-                    self.setState(JSON.parse(currentState))
-                event.target.value = ''
-            }
-        }
-    }
     onSaveInput = () => {
-        let filename = `txDoT_${this.state.District}_${new Date().toISOString().replace('.','|')}`;
-        let saveDataKey = ['DesignLife', 'PunchoutsPerMile', 'LanesOneDirection', 'TrafficOneDirection', 'ModulusOfRupture',
+        let filename = `txDoT_${this.state.Area}_${new Date().toISOString().replace('.','|')}`;
+        let saveDataKey = ['DesignLife', 'PunchoutsPerMile', 'LanesOneDirection', 'TrafficOneDirection', 'ModulusOfRupture','SlabThickness',
             'ElasticModulue', 'SoilClassificationSystem', 'SoilSub', 'PlasticityIndex', 'SubbaseType',
             'SubbaseThickness', 'BaseType', 'BaseThickness', 'BaseThicknessMin', 'ModulusBase',
-            'CompositeK', 'District', 'County', 'Highway', 'ProjectScope', 'StationBegin', 'StationEnd',
-            'currentDistricts', 'currentCounties', 'SubbaseThicknessThreshHold', 'SubbaseTypeOpt', 'baseTypeOpt'];
+            'CompositeK', 'Area', 'Region', 'Highway', 'StationBegin', 'StationEnd',
+            'currentAreas', 'currentRegions', 'SubbaseThicknessThreshHold', 'SubbaseTypeOpt', 'baseTypeOpt'];
         const saveData = {};
         saveDataKey.forEach(k=>saveData[k]=this.state[k]);
         const jsonse = JSON.stringify(saveData);
@@ -702,7 +651,7 @@ class CRCP extends Component {
                         Back
                     </Button>
                     <Button
-                        disabled={!this.state.District}
+                        disabled={!this.state.Area}
                         variant="contained"
                         color="primary"
                         onClick={this.handleNext}
@@ -724,67 +673,42 @@ class CRCP extends Component {
                 <Step>
                     <StepLabel>Step 1</StepLabel>
                     <StepContent displayPrint="block">
-                        <Grid container spacing={4} justify="center">
-                            <Grid item>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    className={classes.button}
-                                    startIcon={<PublishIcon/>}
-                                    component="label"
-                                >
-                                    Load data input
-                                    <input
-                                        accept="application/JSON"
-                                        type="file"
-                                        hidden
-                                        onChange={this.onLoadInput}
-                                    />
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12} container>
-                                <Grid item style={{flexGrow:1}}><Divider variant="middle" /></Grid>
-                                <Grid item style={{transform:'translateY(-50%)'}}>Or</Grid>
-                                <Grid item style={{flexGrow:1}}><Divider variant="middle" /></Grid>
-                            </Grid>
-                        </Grid>
                         <form className={classes.root} noValidate autoComplete="off">
                             <Grid container spacing={4}>
                                 <Grid container item xs={12} spacing={1} justify="center">
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Autocomplete
                                             margin="dense"
-                                            id="district"
-                                            value={this.state.District}
-                                            options={this.state.currentDistricts}
+                                            id="region"
+                                            value={this.state.Region}
+                                            options={this.state.currentRegions}
                                             size="small"
                                             style={{marginTop: 8, marginBottom: 4}}
                                             onChange={(event, value, reason) => {
                                                 if (value == null)
                                                     this.setState({
-                                                        District: value,
-                                                        County: null,
-                                                        currentCounties: Object.keys(counties)
+                                                        Region: value,
+                                                        Area: null,
+                                                        currentAreas: Object.keys(counties)
                                                     });
                                                 else
                                                     this.setState({
-                                                        District: value,
-                                                        County: null,
-                                                        currentCounties: districts[value]
+                                                        Region: value,
+                                                        Area: null,
+                                                        currentAreas: regions[value]
                                                     });
                                             }}
                                             renderInput={(params) => <TextField dense {...params} variant="filled"
                                                                                 className={classes.inputWithHelper}
                                                                                 required
-                                                                                error={!this.state.District}
-                                                                                label={<>DISTRICT<IconButton
+                                                                                error={!this.state.Area}
+                                                                                label={<>Region<IconButton
                                                                                     aria-label="info"
                                                                                     className={classes.margin}
                                                                                     size="small">
                                                                                     <InfoIcon fontSize="small"
-                                                                                              onClick={this.handleOpenHelper({src: DistrictPic},true)}
-                                                                                              onMouseEnter={this.handleOpenHelper({src: DistrictPic})}
+                                                                                              onClick={this.handleOpenHelper({src: RegionPic},true)}
+                                                                                              onMouseEnter={this.handleOpenHelper({src: RegionPic})}
                                                                                               onMouseLeave={this.handleCloseHelper}
                                                                                     /></IconButton></>}
                                             />}/>
@@ -792,31 +716,36 @@ class CRCP extends Component {
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Autocomplete
                                             margin="dense"
-                                            id="county"
-                                            value={this.state.County}
-                                            options={this.state.currentCounties}
+                                            id="area"
+                                            value={this.state.Area}
+                                            options={this.state.currentAreas}
                                             onChange={(event, value) => {
                                                 if (value)
                                                     this.setState({
-                                                        County: value,
-                                                        District: counties[value].length === 1 ? counties[value][0] : null
+                                                        Area: value,
+                                                        Region: counties[value].length === 1 ? counties[value][0] : null
                                                     });
                                                 else
-                                                    this.setState({County: value})
+                                                    this.setState({Area: value})
                                             }}
                                             size="small"
                                             style={{marginTop: 8, marginBottom: 4}}
                                             renderInput={(params) => <TextField dense {...params}
                                                                                 className={classes.inputWithHelper}
-                                                                                label={<>COUNTY<IconButton
+                                                                                label={<>Area<IconButton
                                                                                     aria-label="info"
                                                                                     className={classes.margin}
                                                                                     size="small">
                                                                                     <InfoIcon fontSize="small"
-                                                                                              onClick={this.handleOpenHelper({map: 'county'},true)}
-                                                                                              onMouseEnter={this.handleOpenHelper({map: 'county'})}
+                                                                                              onClick={this.handleOpenHelper({src: AreaPic},true)}
+                                                                                              onMouseEnter={this.handleOpenHelper({src: AreaPic})}
                                                                                               onMouseLeave={this.handleCloseHelper}
                                                                                     /></IconButton></>}
+                                                                                    // <InfoIcon fontSize="small"
+                                                                                    //           onClick={this.handleOpenHelper({map: 'region'},true)}
+                                                                                    //           onMouseEnter={this.handleOpenHelper({map: 'region'})}
+                                                                                    //           onMouseLeave={this.handleCloseHelper}
+                                                                                    // /></IconButton></>}
                                                                                 variant="filled"/>}/>
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
@@ -840,55 +769,6 @@ class CRCP extends Component {
                                             value={this.state.DirectionOfConstruction}
                                             onChange={(event) => this.handleChange('DirectionOfConstruction', event.target.value)}
                                             variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <TextField
-                                            margin="dense"
-                                            id="control"
-                                            label="CONTROL"
-                                            value={this.state.Control}
-                                            onChange={(event) => this.handleChange('Control', event.target.value)}
-                                            variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <TextField
-                                            margin="dense"
-                                            id="section"
-                                            label="SECTION"
-                                            value={this.state.Section}
-                                            onChange={(event) => this.handleChange('Section', event.target.value)}
-                                            variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <TextField
-                                            margin="dense"
-                                            id="job"
-                                            label="JOB"
-                                            value={this.state.Job}
-                                            onChange={(event) => this.handleChange('Job', event.target.value)}
-                                            variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <TextField
-                                            margin="dense"
-                                            id="ProjectScope"
-                                            className={classes.inputWithHelper}
-                                            label={<>Project Scope <IconButton aria-label="info"
-                                                                               className={classes.margin} size="small">
-                                                <InfoIcon fontSize="small"
-                                                          onClick={this.handleOpenHelper({text: "Will be provided later."},true)}
-                                                          onMouseEnter={this.handleOpenHelper({text: "Will be provided later."})}
-                                                          onMouseLeave={this.handleCloseHelper}
-                                                />
-                                            </IconButton></>}
-                                            select
-                                            value={this.state.ProjectScope}
-                                            onChange={(event) => this.handleChange('ProjectScope', event.target.value)}
-                                            variant="filled">
-                                            <MenuItem value="WIDENING">WIDENING</MenuItem>
-                                            <MenuItem value="REHABILITATION">REHABILITATION</MenuItem>
-                                            <MenuItem value="NEW CONSTRUCTION">NEW CONSTRUCTION</MenuItem>
-                                        </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
                                         <TextField
@@ -960,7 +840,7 @@ class CRCP extends Component {
                                                 value={this.state.DesignLife}
                                                 onChange={(event, newValue) => this.setState({DesignLife: newValue})}
                                                 defaultValue={30}
-                                                min={1} max={50}
+                                                min={10} max={30}
                                                 id="DesignLife"
                                             />
                                         </Grid>
@@ -969,14 +849,14 @@ class CRCP extends Component {
                                                 <Input
                                                     value={this.state.DesignLife}
                                                     onChange={(event) => this.handleChangeSliderInput(event, 'DesignLife')}
-                                                    onBlur={() => this.handleBlurSliderInput('DesignLife', 1, 100)}
+                                                    onBlur={() => this.handleBlurSliderInput('DesignLife', 10, 30)}
                                                     id="DesignLife"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
                                                     inputProps={{
-                                                        min: 1,
-                                                        max: 50,
+                                                        min: 10,
+                                                        max: 30,
                                                         type: 'number',
                                                     }}
                                                 />
@@ -1033,7 +913,7 @@ class CRCP extends Component {
                                                 value={this.state.TrafficOneDirection}
                                                 onChange={(event, newValue) => this.setState({TrafficOneDirection: newValue})}
                                                 defaultValue={100}
-                                                min={1} max={500}
+                                                min={30} max={150}
                                                 id="TrafficOneDirection"
                                             />
                                         </Grid>
@@ -1042,14 +922,14 @@ class CRCP extends Component {
                                                 <Input
                                                     value={this.state.TrafficOneDirection}
                                                     onChange={(event) => this.handleChangeSliderInput(event, 'TrafficOneDirection')}
-                                                    onBlur={() => this.handleBlurSliderInput('TrafficOneDirection', 10, 1000)}
+                                                    onBlur={() => this.handleBlurSliderInput('TrafficOneDirection', 30, 150)}
                                                     id="TrafficOneDirection"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
                                                     inputProps={{
-                                                        min: 1,
-                                                        max: 500,
+                                                        min: 30,
+                                                        max: 150,
                                                         type: 'number',
                                                     }}
                                                 />
@@ -1072,7 +952,7 @@ class CRCP extends Component {
                                           alignItems="flex-end">
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Acceptable punchout per mile</span>
+                                                <span>Acceptable punchout per km</span>
                                                 <IconButton aria-label="info" className={classes.margin} size="small">
                                                     <InfoIcon fontSize="small"
                                                               onClick={this.handleOpenHelper({src: AcceptableNumberofPunchoutPic},true)}
@@ -1088,7 +968,7 @@ class CRCP extends Component {
                                                 value={this.state.PunchoutsPerMile}
                                                 onChange={(event, newValue) => this.setState({PunchoutsPerMile: newValue})}
                                                 defaultValue={5}
-                                                min={1} max={20}
+                                                min={1} max={10}
                                                 id="PunchoutsPerMile"
                                                 disabled
                                             />
@@ -1098,14 +978,14 @@ class CRCP extends Component {
                                                 <Input
                                                     value={this.state.PunchoutsPerMile}
                                                     onChange={(event) => this.handleChangeSliderInput(event, 'PunchoutsPerMile')}
-                                                    onBlur={() => this.handleBlurSliderInput('PunchoutsPerMile', 1, 100)}
+                                                    onBlur={() => this.handleBlurSliderInput('PunchoutsPerMile', 1, 10)}
                                                     id="PunchoutsPerMile"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
                                                     inputProps={{
-                                                        min: 5,
-                                                        max: 20,
+                                                        min: 1,
+                                                        max: 10,
                                                         type: 'number',
                                                     }}
                                                     disabled
@@ -1129,7 +1009,7 @@ class CRCP extends Component {
                                           alignItems="flex-end">
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>28-day modulus of rupture (psi)</span>
+                                                <span>28-day modulus of rupture (MPa)</span>
                                                 <span className={classes.dot} style={{flexGrow: 1}}/>
                                             </Grid>
                                         </Grid>
@@ -1139,8 +1019,8 @@ class CRCP extends Component {
                                                     value={this.state.ModulusOfRupture}
                                                     onChange={(event, newValue) => this.setState({ModulusOfRupture: newValue})}
                                                     id="ModulusOfRupture"
-                                                    defaultValue={570}
-                                                    min={1} max={1000}
+                                                    defaultValue={4}
+                                                    min={4} max={5}
                                                     disabled
                                                 />
                                             </Grid>
@@ -1149,53 +1029,54 @@ class CRCP extends Component {
                                             <Input
                                                 value={this.state.ModulusOfRupture}
                                                 onChange={(event) => this.handleChangeSliderInput(event, 'ModulusOfRupture')}
-                                                onBlur={() => this.handleBlurSliderInput('ModulusOfRupture', 1, 1000)}
+                                                onBlur={() => this.handleBlurSliderInput('ModulusOfRupture', 4, 5)}
                                                 id="ModulusOfRupture"
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                                 inputProps={{
-                                                    min: 1,
-                                                    max: 1000,
+                                                    min: 4,
+                                                    max: 5,
                                                     type: 'number',
                                                 }}
                                                 disabled
                                             />
                                         </Grid>
-
+                                    </Grid>
+                                    <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
+                                          alignItems="flex-end">
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Concrete elastic modulus (million psi)</span>
+                                                <span>Existing slab thickness (cm)</span>
                                                 <span className={classes.dot} style={{flexGrow: 1}}/>
                                             </Grid>
                                         </Grid>
                                         <Hidden smDown>
                                             <Grid item xs={3} sm={4} md={3}>
                                                 <Slider
-                                                    value={this.state.ElasticModulue}
-                                                    onChange={(event, newValue) => this.setState({ElasticModulue: newValue})}
-                                                    id="ElasticModulue"
-                                                    defaultValue={570}
-                                                    min={1} max={1000}
+                                                    value={this.state.SlabThickness}
+                                                    onChange={(event, newValue) => this.setState({SlabThickness: newValue})}
+                                                    id="SlabThickness"
+                                                    defaultValue={25}
+                                                    min={25} max={35}
                                                     disabled
                                                 />
                                             </Grid>
                                         </Hidden>
                                         <Grid item xs={1}>
                                             <Input
-                                                value={this.state.ElasticModulue}
-                                                onChange={(event) => this.handleChangeSliderInput(event, 'ElasticModulue')}
-                                                onBlur={() => this.handleBlurSliderInput('ElasticModulue', 1, 1000)}
-                                                id="ModulusOfRupture"
+                                                value={this.state.SlabThickness}
+                                                onChange={(event) => this.handleChangeSliderInput(event, 'SlabThickness')}
+                                                onBlur={() => this.handleBlurSliderInput('SlabThickness', 25, 35)}
+                                                id="SlabThickness"
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                                 inputProps={{
-                                                    min: 1,
-                                                    max: 1000,
+                                                    min: 25,
+                                                    max: 35,
                                                     type: 'number',
                                                 }}
-                                                disabled
                                             />
                                         </Grid>
                                     </Grid>
@@ -1252,71 +1133,6 @@ class CRCP extends Component {
                                                 onChange={(event, value) => this.handleSoilSub(value)}
                                                 renderInput={(params) => <TextField dense {...params} label=""/>}/>
                                         </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Plasticity Index (PI)</span>
-                                                <span className={classes.dot} style={{flexGrow:1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField type="number" id="PlasticityIndex" value={this.state.PlasticityIndex} onChange={(event)=>this.handlePlasticityIndex(event.target.value)}/>
-                                        </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Subgrade treatment</span>
-                                                <IconButton aria-label="info" className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onClick={this.handleOpenHelper({src: subbasePic},true)}
-                                                              onMouseEnter={this.handleOpenHelper({src: subbasePic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
-                                                <span className={classes.dot} style={{flexGrow:1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                margin="dense"
-                                                id="SubbaseType"
-                                                select
-                                                value={this.state.SubbaseType}
-                                                size="small"
-                                                onChange={(event)=>this.handleChange('SubbaseType',event.target.value)}
-                                                >
-                                                {this.state.SubbaseTypeOpt.map(d=><MenuItem value={d} key={d}>{d}</MenuItem>)}
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Subgrade treatment thickness (in.)</span>
-                                                <IconButton aria-label="info" className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onClick={this.handleOpenHelper({src: subbasePic},true)}
-                                                              onMouseEnter={this.handleOpenHelper({src: subbasePic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
-                                                <span className={classes.dot} style={{flexGrow:1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                error={this.errorFunc.Step3.SubbaseThickness()}
-                                                helperText={this.errorFunc.Step3.SubbaseThickness()}
-                                                type="number" id="SubbaseThickness" value={this.state.SubbaseThickness}
-                                                onChange={(event) => ((event.target.value>0)||(event.target.value===''))?this.handleChange("SubbaseThickness",event.target.value):''}
-                                                inputProps={{min:0}}
-                                            />
-                                        </Grid>
-                                        {/*<Grid item xs={8} justify="flex-start">*/}
-                                        {/*    <Grid container xs={12} justify="flex-start">*/}
-                                        {/*        <span>Composite K (psi/in.)</span>*/}
-                                        {/*        <span className={classes.dot} style={{flexGrow:1}}/>*/}
-                                        {/*    </Grid>*/}
-                                        {/*</Grid>*/}
-                                        {/*<Grid item xs={4}>*/}
-                                        {/*    <input type="number" id="19" value={this.state.CompositeK} onChange={(event, newValue) => this.setState({CompositeK:newValue})}/>*/}
-                                        {/*</Grid>*/}
                                     </Grid>
                                 </Grid>
                                 <Grid container item xs={12} spacing={1} alignItems="flex-end" justify="center">
@@ -1325,35 +1141,10 @@ class CRCP extends Component {
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
+
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Base type</span>
-                                                <IconButton
-                                                    aria-label="info"
-                                                    className={classes.margin}
-                                                    size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onMouseEnter={this.handleOpenHelper({src: BasetypePic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    /></IconButton>
-                                                <span className={classes.dot} style={{flexGrow: 1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                select
-                                                margin="dense"
-                                                id="BaseType"
-                                                size="small"
-                                                value={this.state.BaseType}
-                                                onChange={(event)=>{this.handleBaseType(event.target.value)}}
-                                            >
-                                                {this.state.baseTypeOpt.map(d=><MenuItem value={d} key={d}>{d}</MenuItem>)}
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Base layer thickness (inches)</span>
+                                                <span>Base layer thickness (cm)</span>
                                                 <IconButton aria-label="info"
                                                             className={classes.margin} size="small">
                                                     <InfoIcon fontSize="small"
@@ -1377,13 +1168,14 @@ class CRCP extends Component {
                                                     }}
                                                     inputProps={{
                                                         min: this.state.BaseThicknessMin,
+                                                        max: this.state.BaseThicknessMax,
                                                         type: 'number',
                                                     }}
                                                 />
                                             </Grid>
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Modulus of base layer (ksi)</span>
+                                                <span>Modulus of base layer (MPa)</span>
                                                 <IconButton aria-label="info"
                                                             className={classes.margin} size="small">
                                                     <InfoIcon fontSize="small"
@@ -1397,11 +1189,16 @@ class CRCP extends Component {
                                         <Grid item xs={4}>
                                             <TextField type="number" id="ModulusBase " value={this.state.ModulusBase }
                                                        disabled
-                                                   onChange={(event) => this.setState({ModulusBase : event.target.value})}/>
+                                                   onChange={(event) => this.setState({ModulusBase : event.target.value})}
+                                                       inputProps={{
+                                                           min: 350,
+                                                           max: 3500,
+                                                           type: 'number',
+                                                       }}/>
                                         </Grid>
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Composite k-Value</span>
+                                                <span>Composite k-Value (MPa/m)</span>
                                                 <IconButton aria-label="info"
                                                             className={classes.margin} size="small">
                                                     <InfoIcon fontSize="small"
@@ -1572,17 +1369,17 @@ class CRCP extends Component {
                         <CloseIcon />
                     </IconButton>:''}
 
-                <County highlight={this.state.currentCounties}
-                        target={this.state.County}
-                        selected={(value)=>{
-                    if (value)
-                        this.setState({
-                            County: value,
-                            District: counties[value].length === 1 ? counties[value][0] : null
-                        });
-                    else
-                        this.setState({County: value})
-                }}/>
+                {/*<Region highlight={this.state.currentRegions}*/}
+                {/*        target={this.state.Region}*/}
+                {/*        selected={(value)=>{*/}
+                {/*    if (value)*/}
+                {/*        this.setState({*/}
+                {/*            Region: value,*/}
+                {/*            Area: counties[value].length === 1 ? counties[value][0] : null*/}
+                {/*        });*/}
+                {/*    else*/}
+                {/*        this.setState({Region: value})*/}
+                {/*}}/>*/}
                 </Card>
             </Popper>
         </Container>);

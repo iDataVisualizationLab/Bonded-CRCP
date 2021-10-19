@@ -88,34 +88,22 @@ class Report extends Component {
                                 Identification</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            District
+                            Region
                         </Grid>
                         <Grid item xs={4}>
-                            {this.props.data.District}
+                            {this.props.data.Region}
                         </Grid>
                         <Grid item xs={8}>
-                            County
+                            Area
                         </Grid>
                         <Grid item xs={4}>
-                            {this.props.data.County}
+                            {this.props.data.Area}
                         </Grid>
                         <Grid item xs={8}>
                             Highway
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.Highway}
-                        </Grid>
-                        <Grid item xs={8}>
-                            CSJ
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.CSJ}
-                        </Grid>
-                        <Grid item xs={8}>
-                            Project Scope
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.ProjectScope}
                         </Grid>
                         <Grid item xs={8}>
                             Station (Begin)
@@ -141,7 +129,7 @@ class Report extends Component {
                             {this.props.data.DesignLife}
                         </Grid>
                         <Grid item xs={8}>
-                            Number of Punchouts per Mile
+                            Number of Punchouts per km
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.PunchoutsPerMile}
@@ -158,9 +146,14 @@ class Report extends Component {
                         <Grid item xs={4}>
                             {this.props.data.TrafficOneDirection}
                         </Grid>
-
+                        <Grid item xs={8}>
+                            Existing Slab Thickness (cm)
+                        </Grid>
+                        <Grid item xs={4}>
+                            {this.props.data.SlabThickness}
+                        </Grid>
                         <Grid item xs={12}>
-                            <Typography variant={'h6'} className={classes.subHeader}> C. Subgrade and Treatment Information & subtitles</Typography>
+                            <Typography variant={'h6'} className={classes.subHeader}> C. Subgrade Information</Typography>
                         </Grid>
                         <Grid item xs={8}>
                             Soil Classification System
@@ -174,43 +167,19 @@ class Report extends Component {
                         <Grid item xs={4}>
                             {this.props.data.SoilSub}
                         </Grid>
-                        <Grid item xs={8}>
-                            Plasticity Index (PI)
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.PlasticityIndex}
-                        </Grid>
-                        <Grid item xs={8}>
-                            Subbase Type
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.SubbaseType}
-                        </Grid>
-                        <Grid item xs={8}>
-                            Subbase Thickness (in.)
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.SubbaseThickness}
-                        </Grid>
 
                         <Grid item xs={12}>
                             <Typography variant={'h6'} className={classes.subHeader}>D. Base Layer
                                 Information</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            Base Type
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.BaseType}
-                        </Grid>
-                        <Grid item xs={8}>
-                            Base Thickness (in.)
+                            Base Thickness (cm)
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.BaseThickness}
                         </Grid>
                         <Grid item xs={8}>
-                            Modulus of Base Layer (ksi)
+                            Modulus of Base Layer (MPa)
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.ModulusBase}
@@ -244,19 +213,19 @@ class Report extends Component {
                           alignContent="flex-start"
                     >
                         <Grid item xs={12}>
-                            <Typography variant={'h5'} className={classes.header}>ANALYSIS RESULT</Typography>
+                            <Typography variant={'h5'} className={classes.header}>OVERLAY DESIGN</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant={'h6'} className={classes.subHeader}> F. Design Slab Thickness & Performance</Typography>
                         </Grid>
                         <Grid item xs={8} className={classes.underline}>
-                            Design Slab Thickness
+                            Design Slab Thickness (cm)
                         </Grid>
                         <Grid item xs={4} className={classes.underline} style={{color:(this.props.AnalysisSlabThickness>13)?'red':null}}>
                             {this.props.AnalysisSlabThickness}
                         </Grid>
                         <Grid item xs={8} className={classes.underline}>
-                            Number of Punchouts per Mile
+                            Number of Punchouts per Km
                         </Grid>
                         <Grid item xs={4} className={classes.underline} style={{color:(this.props.AnalysisPunchouts>this.props.data.PunchoutsPerMile)?'red':null}}>
                             {this.props.AnalysisPunchouts ? this.props.AnalysisPunchouts.toFixed(2) : ''}
@@ -279,56 +248,27 @@ class Report extends Component {
                                 <Grid xs item>≥{this.state.BondBreaker}''</Grid>
                             </Grid>:''}
                             <Grid container alignContent={"center"}
-                                  style={{flexGrow: this.props.data.BaseThickness, backgroundColor: '#D9D9D9'}}>
+                                  style={{flexGrow: this.props.data.JCPC, backgroundColor: '#D9D9D9'}}>
                                 <Grid className={classes.layerHolder} container>
-                                    <Grid xs item>Base</Grid>
-                                    <Grid xs item>Type</Grid>
-                                    <Grid xs item>{this.props.data.BaseType}</Grid>
-                                </Grid>
-                                <Grid className={classes.layerHolder} container>
-                                    <Grid xs item></Grid>
+                                    <Grid xs item>JCPC</Grid>
                                     <Grid xs item>Thickness</Grid>
-                                    <Grid xs item>{this.props.data.BaseThickness}''</Grid>
-                                </Grid>
-                                <Grid className={classes.layerHolder} container>
-                                    <Grid xs item></Grid>
-                                    <Grid xs item>Item 276</Grid>
-                                    <Grid xs item>Class L</Grid>
+                                    <Grid xs item>{this.props.data.JCPC}''</Grid>
                                 </Grid>
                             </Grid>
                             <Grid container alignContent={"center"}
-                                  style={{flexGrow: this.props.data.SubbaseThickness, backgroundColor: '#F2F2F2'}}>
+                                  style={{flexGrow: this.props.data.BaseThickness, backgroundColor: '#F2F2F2'}}>
                                 <Grid className={classes.layerHolder} container>
-                                    <Grid xs item>Subbase</Grid>
-                                    <Grid xs item>Type</Grid>
-                                    <Grid xs item>{this.props.data.SubbaseType}</Grid>
-                                </Grid>
-                                <Grid className={classes.layerHolder} container>
-                                    <Grid xs item></Grid>
+                                    <Grid xs item>Base</Grid>
                                     <Grid xs item>Thickness</Grid>
-                                    <Grid xs item>{this.props.data.SubbaseThickness}''</Grid>
+                                    <Grid xs item>{this.props.data.BaseThickness}''</Grid>
                                 </Grid>
                             </Grid>
                             <Grid container alignContent={"center"}
                                   style={{flexGrow: this.state.NaturalSoil, backgroundColor: '#FFC000'}}>
                                 <Grid className={classes.layerHolder} container>
                                     <Grid xs item>Natural Soil</Grid>
-                                    <Grid xs item>Type</Grid>
-                                    <Grid xs item>{this.props.data.SoilSub}</Grid>
-                                </Grid>
-                                <Grid className={classes.layerHolder} container>
-                                    <Grid xs item></Grid>
-                                    <Grid xs item>PI</Grid>
-                                    <Grid xs item>{this.props.data.PlasticityIndex}</Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12} container>
-                            <ul>
-                                <li>"The minimum thickness for CRCP is 7 in., and the maximum thickness is 13 in.</li>
-                                <li>Use 13 in. for slab thicknesses greater than 13 in.</li>
-                                 <li>Districts should use 13-in. slab as a design slab thickness. Districts wanting to use thicker pavements should submit design greater than 13-in. to the district engineer for approval along with their justification for doing so.</li>
-                            </ul>
                         </Grid>
                     </Grid>
 

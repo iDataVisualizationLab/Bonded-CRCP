@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {AppBar,IconButton,Typography,Button,Toolbar,Grid,Slide} from '@material-ui/core';
 import coverPic from './image/cover.jpg';
 import CRCP from './component/CRCP'
+import logo from './image/logo.png'
 import Report from "./component/report";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     zIndex: -1
   },
+  logo: {
+    height: '3rem'
+  }
 }));
 
 function App() {
@@ -44,27 +48,25 @@ function App() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.titleNav}>
-            TxCRCP-ME
+            Bonded CRCP
           </Typography>
+          <div className={classes.grow}></div>
+          <a href={'https://www.kict.re.kr/eng/'}>
+          <img src={logo} className={classes.logo}/>
+          </a>
         </Toolbar>
       </AppBar>
       <div className={classes.root}>
         <Slide direction="up" in={page==='home'} mountOnEnter unmountOnExit>
           <Grid container spacing={5} alignItems="center" justify="center" direction={"column"} style={{height: 'calc(100vh - 64px)',width:'100%'}}>
             <Grid item>
-              <Typography variant="h3" className={classes.title}>
-                TxDOT Mechanistic-Empirical CRCP Design System
+              <Typography variant="h4" className={classes.title}>
+                Bonded CRCP Overlay on Jointed Concrete Pavement Design System
               </Typography>
             </Grid>
             <Grid container item alignItems="stretch" justify="center" direction={"column"} spacing={3} style={{width:'fit-content'}}>
               <Grid item>
-                <Button variant="contained" color="primary" style={{width:'100%'}} onClick={()=>setPage('CRCP')}>CRCP Design</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" style={{width:'100%'}}>Slab Support</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" style={{width:'100%'}}>Product Disclaimer</Button>
+                <Button variant="contained" color="primary" style={{width:'100%'}} size={"large"} onClick={()=>setPage('CRCP')}>Start</Button>
               </Grid>
             </Grid>
           </Grid>
