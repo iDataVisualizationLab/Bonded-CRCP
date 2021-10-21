@@ -51,13 +51,14 @@ import temperature from "./data/temperature.csv";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider/Divider";
 import Region from "./County";
+import ComtrolwithSlider from "./ControlwithSlider";
 
 const regions = {
-    "1": ['고산', '성산', '서귀포', '제주', '흑산도', '진도군', '완도', '여수', '울릉도', '통영', '보성군', '거제', '목포', '고흥', '광양시', '북창원', '남해', '장흥'],
-    "2": ['부산', '강진군', '양산시', '백령도', '김해시', '광주', '동해', '순천', '보령', '해남', '창원', '울진', '군산', '포항', '울산', '산청', '영광군', '경주시', '대구', '의령군', '구미', '북강릉', '고창군', '진주', '정읍', '고창', '홍성', '함양군', '강릉', '추풍령', '전주', '상주', '순창군', '해주', '밀양', '영덕', '용연', '속초', '인천', '부안', '장전', '영천', '문경', '거창', '서산', '합천', '김책', '남포', '청진', '대전', '원산', '사리원', '청주', '남원', '개성', '태백', '평양', '수원', '강화', '선봉', '청송군', '서울', '안주', '신의주', '부여', '영주', '함흥', '신포', '안동', '임실', '정선군', '장수', '원주', '신계'],
-    "3": ['보은', '금산', '천안', '충주', '대관령', '양평', '파주', '북춘천', '인제', '수풍', '이천', '영월', '희천', '의성', '평강', '춘천', '구성', '동두천', '제천', '봉화', '풍산', '양덕', '철원', '홍천', '강계', '장진', '삼지연', '중강', '혜산'],
+    "I": ['고산', '성산', '서귀포', '제주', '흑산도', '진도군', '완도', '여수', '울릉도', '통영', '보성군', '거제', '목포', '고흥', '광양시', '북창원', '남해', '장흥'],
+    "II": ['부산', '강진군', '양산시', '백령도', '김해시', '광주', '동해', '순천', '보령', '해남', '창원', '울진', '군산', '포항', '울산', '산청', '영광군', '경주시', '대구', '의령군', '구미', '북강릉', '고창군', '진주', '정읍', '고창', '홍성', '함양군', '강릉', '추풍령', '전주', '상주', '순창군', '해주', '밀양', '영덕', '용연', '속초', '인천', '부안', '장전', '영천', '문경', '거창', '서산', '합천', '김책', '남포', '청진', '대전', '원산', '사리원', '청주', '남원', '개성', '태백', '평양', '수원', '강화', '선봉', '청송군', '서울', '안주', '신의주', '부여', '영주', '함흥', '신포', '안동', '임실', '정선군', '장수', '원주', '신계'],
+    "III": ['보은', '금산', '천안', '충주', '대관령', '양평', '파주', '북춘천', '인제', '수풍', '이천', '영월', '희천', '의성', '평강', '춘천', '구성', '동두천', '제천', '봉화', '풍산', '양덕', '철원', '홍천', '강계', '장진', '삼지연', '중강', '혜산'],
 };
-
+const region2Number = {'I':1,'II':2,'III':3};
 const counties = {};
 Object.keys(regions).forEach(key => {
     regions[key].forEach(c => counties[c] ? counties[c].push(key) : counties[c] = [key])
@@ -107,6 +108,16 @@ const styles = theme => ({
         top: theme.spacing(1),
         color: theme.palette.grey[500],
         zIndex:2
+    },
+    hideArrow:{
+        '&::-webkit-outer-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: 0,
+        },
+        '&::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: 0,
+        }
     }
 });
 
@@ -131,7 +142,7 @@ const init = {
     PunchoutsPerMile: 6,
     LanesOneDirection: 2,
     TrafficOneDirection: 60,
-    ModulusOfRupture: 4,
+    ModulusOfRupture: 4.5,
     SlabThickness: 25,
     ElasticModulue: 5,
     SoilClassificationSystem:'USCS',
@@ -141,8 +152,8 @@ const init = {
     SubbaseThickness:12,
     BaseType:'',
     BaseThickness: 15,
-    BaseThicknessMin: 0,
-    BaseThicknessMax: 15,
+    BaseThicknessMin: 10,
+    BaseThicknessMax: 20,
     ModulusBase : 400,
     CompositeK: 539,
     Area: null,
@@ -171,9 +182,9 @@ class CRCP extends Component {
         this.state = {...init};
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if ((prevState.ModulusBase!==this.state.ModulusBase)||(prevState.SoilSub!==this.state.SoilSub)||(prevState.BaseThickness!==this.state.BaseThickness)){
-            this.calculateCompositeK();
-        }
+        // if ((prevState.ModulusBase!==this.state.ModulusBase)||(prevState.SoilSub!==this.state.SoilSub)||(prevState.BaseThickness!==this.state.BaseThickness)){
+        //     this.calculateCompositeK();
+        // }
     }
 
     componentDidMount() {
@@ -197,7 +208,7 @@ class CRCP extends Component {
     }
     computeStress = (SlabThickness)=>{ // F7
         let input = {
-            Region: {Input:this.state.Region},
+            Region: {Input: region2Number[this.state.Region]},
             H1: {Input:SlabThickness,"L Bound":0, "H Bound":0},
             K: {Input:this.state.CompositeK,"L Bound":0, "H Bound":0},
             'MR Des': {Input:5},
@@ -547,16 +558,17 @@ class CRCP extends Component {
         this.setState({SoilSub:value,baseTypeOpt,BaseType});
     };
     handleBaseType = (value) => {
-        let BaseThicknessMin = 4;
-        let BaseThickness = this.state.BaseThickness;
-        let ModulusBase = 400;
-        if (value==='CTB'){
-            BaseThicknessMin = 6;
-            ModulusBase = 500;
-        }
-        if (BaseThickness<BaseThicknessMin)
-            BaseThickness = BaseThicknessMin;
-        this.setState({BaseType:value,BaseThicknessMin,BaseThickness,ModulusBase});
+        // let BaseThicknessMin = 4;
+        // let BaseThickness = this.state.BaseThickness;
+        // let ModulusBase = 400;
+        // if (value==='CTB'){
+        //     BaseThicknessMin = 6;
+        //     ModulusBase = 500;
+        // }
+        // if (BaseThickness<BaseThicknessMin)
+        //     BaseThickness = BaseThicknessMin;
+        // this.setState({BaseType:value,BaseThicknessMin,BaseThickness,ModulusBase});
+        this.setState({BaseType:value})
     }
     handlePlasticityIndex = (value)=>{
         let SubbaseTypeOpt = [];
@@ -651,7 +663,7 @@ class CRCP extends Component {
                         Back
                     </Button>
                     <Button
-                        disabled={!this.state.Area}
+                        disabled={!this.state.Region}
                         variant="contained"
                         color="primary"
                         onClick={this.handleNext}
@@ -677,89 +689,79 @@ class CRCP extends Component {
                             <Grid container spacing={4}>
                                 <Grid container item xs={12} spacing={1} justify="center">
                                     <Grid item xs={12} sm={6} md={3}>
-                                        <Autocomplete
+                                        <TextField
                                             margin="dense"
+                                            variant="filled"
+                                            select
                                             id="region"
                                             value={this.state.Region}
-                                            options={this.state.currentRegions}
                                             size="small"
                                             style={{marginTop: 8, marginBottom: 4}}
-                                            onChange={(event, value, reason) => {
+                                            onChange={(event) => {
+                                                const value = event.target.value;
                                                 if (value == null)
                                                     this.setState({
                                                         Region: value,
-                                                        Area: null,
                                                         currentAreas: Object.keys(counties)
                                                     });
                                                 else
                                                     this.setState({
                                                         Region: value,
-                                                        Area: null,
                                                         currentAreas: regions[value]
                                                     });
                                             }}
-                                            renderInput={(params) => <TextField dense {...params} variant="filled"
-                                                                                className={classes.inputWithHelper}
-                                                                                required
-                                                                                error={!this.state.Area}
-                                                                                label={<>Region<IconButton
-                                                                                    aria-label="info"
-                                                                                    className={classes.margin}
-                                                                                    size="small">
-                                                                                    <InfoIcon fontSize="small"
-                                                                                              onClick={this.handleOpenHelper({src: RegionPic},true)}
-                                                                                              onMouseEnter={this.handleOpenHelper({src: RegionPic})}
-                                                                                              onMouseLeave={this.handleCloseHelper}
-                                                                                    /></IconButton></>}
-                                            />}/>
+                                            required
+                                            error={!this.state.Region}
+                                            label={<>Region<IconButton
+                                                aria-label="info"
+                                                className={classes.margin}
+                                                size="small">
+                                                <InfoIcon fontSize="small"
+                                                          onClick={this.handleOpenHelper({src: RegionPic},true)}
+                                                          onMouseEnter={this.handleOpenHelper({src: RegionPic})}
+                                                          onMouseLeave={this.handleCloseHelper}
+                                                /></IconButton></>}
+                                        >
+                                            {this.state.currentRegions.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
-                                        <Autocomplete
-                                            margin="dense"
-                                            id="area"
-                                            value={this.state.Area}
-                                            options={this.state.currentAreas}
-                                            onChange={(event, value) => {
-                                                if (value)
-                                                    this.setState({
-                                                        Area: value,
-                                                        Region: counties[value].length === 1 ? counties[value][0] : null
-                                                    });
-                                                else
-                                                    this.setState({Area: value})
-                                            }}
-                                            size="small"
-                                            style={{marginTop: 8, marginBottom: 4}}
-                                            renderInput={(params) => <TextField dense {...params}
-                                                                                className={classes.inputWithHelper}
-                                                                                label={<>Area<IconButton
-                                                                                    aria-label="info"
-                                                                                    className={classes.margin}
-                                                                                    size="small">
-                                                                                    <InfoIcon fontSize="small"
-                                                                                              onClick={this.handleOpenHelper({src: AreaPic},true)}
-                                                                                              onMouseEnter={this.handleOpenHelper({src: AreaPic})}
-                                                                                              onMouseLeave={this.handleCloseHelper}
-                                                                                    /></IconButton></>}
-                                                                                    // <InfoIcon fontSize="small"
-                                                                                    //           onClick={this.handleOpenHelper({map: 'region'},true)}
-                                                                                    //           onMouseEnter={this.handleOpenHelper({map: 'region'})}
-                                                                                    //           onMouseLeave={this.handleCloseHelper}
-                                                                                    // /></IconButton></>}
-                                                                                variant="filled"/>}/>
+                                        <TextField dense margin="dense"
+                                                   id="area"
+                                                   value={this.state.Area}
+                                                   className={classes.inputWithHelper}
+                                                   onChange={(event) => {
+                                                       this.setState({Area: event.target.value})
+                                                   }}
+                                                   size="small"
+                                                   style={{marginTop: 8, marginBottom: 4}}
+                                                   label={<>Location<IconButton
+                                                       aria-label="info"
+                                                       className={classes.margin}
+                                                       size="small">
+                                                       <InfoIcon fontSize="small"
+                                                                 onClick={this.handleOpenHelper({src: AreaPic},true)}
+                                                                 onMouseEnter={this.handleOpenHelper({src: AreaPic})}
+                                                                 onMouseLeave={this.handleCloseHelper}
+                                                       /></IconButton></>}
+                                                   variant="filled"/>
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
-                                        <Autocomplete
+                                        <TextField dense
                                             margin="dense"
                                             id="highway"
                                             options={highway}
                                             value={this.state.Highway}
+                                                   label="HIGHWAY"
+                                                   variant="filled"
                                             onChange={(event, value) => this.handleChange('Highway', value)}
                                             size="small"
-                                            freeSolo
                                             style={{marginTop: 8, marginBottom: 4}}
-                                            renderInput={(params) => <TextField dense {...params} label="HIGHWAY"
-                                                                                variant="filled"/>}/>
+                                            />
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
                                         <TextField
@@ -898,13 +900,6 @@ class CRCP extends Component {
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
                                                 <span>Total design traffic in one direction (million ESAL)</span>
-                                                <IconButton aria-label="info" className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onClick={this.handleOpenHelper({src: TrafficOneDirectionPic},true)}
-                                                              onMouseEnter={this.handleOpenHelper({src: TrafficOneDirectionPic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
                                                 <span className={classes.dot} style={{flexGrow: 1}}/>
                                             </Grid>
                                         </Grid>
@@ -940,26 +935,12 @@ class CRCP extends Component {
                                 <Grid container item xs={12} spacing={1} alignItems="flex-end" justify="center">
                                     <Grid item xs={12} container justify="flex-start">
                                         <Typography variant={'h6'}>Structural Design Criteria</Typography>
-                                        <IconButton aria-label="info" className={classes.margin} size="small">
-                                            <InfoIcon fontSize="small"
-                                                      onClick={this.handleOpenHelper({src: StructureDesignCriteriaPic},true)}
-                                                      onMouseEnter={this.handleOpenHelper({src: StructureDesignCriteriaPic})}
-                                                      onMouseLeave={this.handleCloseHelper}
-                                            />
-                                        </IconButton>
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
                                                 <span>Acceptable punchout per km</span>
-                                                <IconButton aria-label="info" className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onClick={this.handleOpenHelper({src: AcceptableNumberofPunchoutPic},true)}
-                                                              onMouseEnter={this.handleOpenHelper({src: AcceptableNumberofPunchoutPic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
                                                 <span className={classes.dot} style={{flexGrow: 1}}/>
                                             </Grid>
                                         </Grid>
@@ -970,7 +951,6 @@ class CRCP extends Component {
                                                 defaultValue={5}
                                                 min={1} max={10}
                                                 id="PunchoutsPerMile"
-                                                disabled
                                             />
                                         </Grid>
                                         <Hidden smDown>
@@ -988,7 +968,6 @@ class CRCP extends Component {
                                                         max: 10,
                                                         type: 'number',
                                                     }}
-                                                    disabled
                                                 />
                                             </Grid>
                                         </Hidden>
@@ -997,88 +976,28 @@ class CRCP extends Component {
                                 <Grid container item xs={12} spacing={1} alignItems="flex-end" justify="center">
                                     <Grid item xs={12} container justify="flex-start">
                                         <Typography variant={'h6'}>Concrete Layer/Material Information</Typography>
-                                        <IconButton aria-label="info" className={classes.margin} size="small">
-                                            <InfoIcon fontSize="small"
-                                                      onClick={this.handleOpenHelper({src: ConcreteLayerPic},true)}
-                                                      onMouseEnter={this.handleOpenHelper({src: ConcreteLayerPic})}
-                                                      onMouseLeave={this.handleCloseHelper}
-                                            />
-                                        </IconButton>
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>28-day modulus of rupture (MPa)</span>
-                                                <span className={classes.dot} style={{flexGrow: 1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Hidden smDown>
-                                            <Grid item xs={3} sm={4} md={3}>
-                                                <Slider
-                                                    value={this.state.ModulusOfRupture}
-                                                    onChange={(event, newValue) => this.setState({ModulusOfRupture: newValue})}
-                                                    id="ModulusOfRupture"
-                                                    defaultValue={4}
-                                                    min={4} max={5}
-                                                    disabled
-                                                />
-                                            </Grid>
-                                        </Hidden>
-                                        <Grid item xs={1}>
-                                            <Input
-                                                value={this.state.ModulusOfRupture}
-                                                onChange={(event) => this.handleChangeSliderInput(event, 'ModulusOfRupture')}
-                                                onBlur={() => this.handleBlurSliderInput('ModulusOfRupture', 4, 5)}
-                                                id="ModulusOfRupture"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    min: 4,
-                                                    max: 5,
-                                                    type: 'number',
-                                                }}
-                                                disabled
-                                            />
-                                        </Grid>
+                                        <ComtrolwithSlider
+                                            title={'Existing slab thickness before milling (cm)'}
+                                            classes={classes}
+                                            value={this.state.SlabThickness}
+                                            setValue={(v)=>this.setState({SlabThickness:v})}
+                                            min={25}
+                                            max={35}
+                                        />
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Existing slab thickness (cm)</span>
-                                                <span className={classes.dot} style={{flexGrow: 1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Hidden smDown>
-                                            <Grid item xs={3} sm={4} md={3}>
-                                                <Slider
-                                                    value={this.state.SlabThickness}
-                                                    onChange={(event, newValue) => this.setState({SlabThickness: newValue})}
-                                                    id="SlabThickness"
-                                                    defaultValue={25}
-                                                    min={25} max={35}
-                                                    disabled
-                                                />
-                                            </Grid>
-                                        </Hidden>
-                                        <Grid item xs={1}>
-                                            <Input
-                                                value={this.state.SlabThickness}
-                                                onChange={(event) => this.handleChangeSliderInput(event, 'SlabThickness')}
-                                                onBlur={() => this.handleBlurSliderInput('SlabThickness', 25, 35)}
-                                                id="SlabThickness"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    min: 25,
-                                                    max: 35,
-                                                    type: 'number',
-                                                }}
-                                            />
-                                        </Grid>
+                                        <ComtrolwithSlider
+                                            title={'28-day modulus of rupture (MPa)'}
+                                            classes={classes}
+                                            value={this.state.ModulusOfRupture}
+                                            setValue={(v)=>this.setState({ModulusOfRupture:v})}
+                                            step={0.01}
+                                            min={4.5} max={5}
+                                        />
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -1100,13 +1019,6 @@ class CRCP extends Component {
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
                                                 <span>Soil classification system</span>
-                                                <IconButton aria-label="info" className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onClick={this.handleOpenHelper({src: soilSystermPic},true)}
-                                                              onMouseEnter={this.handleOpenHelper({src: soilSystermPic})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
                                                 <span className={classes.dot} style={{flexGrow:1}}/>
                                             </Grid>
                                         </Grid>
@@ -1141,77 +1053,41 @@ class CRCP extends Component {
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
-
+                                        <ComtrolwithSlider
+                                            title={'Base layer thickness (cm)'}
+                                            classes={classes}
+                                            value={this.state.BaseThickness}
+                                            setValue={(v)=>this.setState({BaseThickness:v})}
+                                            step={0.01}
+                                            min={this.state.BaseThicknessMin} max={this.state.BaseThicknessMax}
+                                            error={this.errorFunc.Step3.BaseThickness()}
+                                            helperText={this.errorFunc.Step3.BaseThickness()}
+                                        />
+                                    </Grid>
+                                    <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
+                                          alignItems="flex-end">
+                                        <ComtrolwithSlider
+                                            title={'Modulus of base layer (MPa)'}
+                                            classes={classes}
+                                            value={this.state.ModulusBase}
+                                            setValue={(v)=>this.setState({ModulusBase:v})}
+                                            min={15000} max={30000}
+                                            error={this.errorFunc.Step3.BaseThickness()}
+                                            helperText={this.errorFunc.Step3.BaseThickness()}
+                                        />
                                         <Grid item xs={8} justify="flex-start">
                                             <Grid container xs={12} justify="flex-start">
-                                                <span>Base layer thickness (cm)</span>
-                                                <IconButton aria-label="info"
-                                                            className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onMouseEnter={this.handleOpenHelper({text: <><div>Minimum Cap.</div><div>CTB ≥ 6.0 in.</div><div>HMA ≥ 4.0 in</div></>})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
-                                                <span className={classes.dot} style={{flexGrow: 1}}/>
-                                            </Grid>
-                                        </Grid>
-
-                                            <Grid item xs={4}>
-                                                <TextField
-                                                    error={this.errorFunc.Step3.BaseThickness()}
-                                                    helperText={this.errorFunc.Step3.BaseThickness()}
-                                                    value={this.state.BaseThickness}
-                                                    onChange={(event) => this.handleChange('BaseThickness',event.target.value)}
-                                                    id="BaseThickness"
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    inputProps={{
-                                                        min: this.state.BaseThicknessMin,
-                                                        max: this.state.BaseThicknessMax,
-                                                        type: 'number',
-                                                    }}
-                                                />
-                                            </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Modulus of base layer (MPa)</span>
-                                                <IconButton aria-label="info"
-                                                            className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onMouseEnter={this.handleOpenHelper({text: <><div>CTB = 500 ksi</div><div>HMA base = 400 ksi</div></>})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
+                                                <span>Composite k-value (MPa/m)</span>
                                                 <span className={classes.dot} style={{flexGrow: 1}}/>
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <TextField type="number" id="ModulusBase " value={this.state.ModulusBase }
-                                                       disabled
-                                                   onChange={(event) => this.setState({ModulusBase : event.target.value})}
-                                                       inputProps={{
-                                                           min: 350,
-                                                           max: 3500,
-                                                           type: 'number',
-                                                       }}/>
-                                        </Grid>
-                                        <Grid item xs={8} justify="flex-start">
-                                            <Grid container xs={12} justify="flex-start">
-                                                <span>Composite k-Value (MPa/m)</span>
-                                                <IconButton aria-label="info"
-                                                            className={classes.margin} size="small">
-                                                    <InfoIcon fontSize="small"
-                                                              onMouseEnter={this.handleOpenHelper({text: 'Composite k table'})}
-                                                              onMouseLeave={this.handleCloseHelper}
-                                                    />
-                                                </IconButton>
-                                                <span className={classes.dot} style={{flexGrow: 1}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField type="number" id="CompositeK " value={this.state.CompositeK }
-                                                       disabled/>
+                                            <TextField type="number" id="CompositeK " value={this.state.CompositeK}
+                                                       onChange={(event)=>this.setState({CompositeK:+event.target.value})}
+                                                       InputProps={{inputProps:{
+                                                           className: classes.hideArrow
+                                                       }}}
+                                                       />
                                         </Grid>
                                     </Grid>
                                 </Grid>

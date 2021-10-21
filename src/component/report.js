@@ -147,7 +147,7 @@ class Report extends Component {
                             {this.props.data.TrafficOneDirection}
                         </Grid>
                         <Grid item xs={8}>
-                            Existing Slab Thickness (cm)
+                            Existing Slab Thickness before Milling (cm)
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.SlabThickness}
@@ -185,7 +185,7 @@ class Report extends Component {
                             {this.props.data.ModulusBase}
                         </Grid>
                         <Grid item xs={8}>
-                            Composite K (psi/in.)
+                            Composite K (MPa/m)
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.CompositeK}
@@ -196,16 +196,10 @@ class Report extends Component {
                                 Properties</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            28-Day Modulus of Rupture (psi)
+                            28-Day Modulus of Rupture (MPa)
                         </Grid>
                         <Grid item xs={4}>
                             {this.props.data.ModulusOfRupture}
-                        </Grid>
-                        <Grid item xs={8}>
-                            Elastic Modulus (million psi)
-                        </Grid>
-                        <Grid item xs={4}>
-                            {this.props.data.ElasticModulue}
                         </Grid>
                     </Grid>
                     <Grid item xs={6} container justify="flex-start"
@@ -216,7 +210,7 @@ class Report extends Component {
                             <Typography variant={'h5'} className={classes.header}>OVERLAY DESIGN</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography variant={'h6'} className={classes.subHeader}> F. Design Slab Thickness & Performance</Typography>
+                            <Typography variant={'h6'} className={classes.subHeader}> F. Overlay Slab Thickness & Performance</Typography>
                         </Grid>
                         <Grid item xs={8} className={classes.underline}>
                             Design Slab Thickness (cm)
@@ -236,23 +230,23 @@ class Report extends Component {
                         <Grid item xs={12} container justify="center" direction="column" style={{minHeight: 500}}>
                             <Grid className={classes.layerHolder} container alignContent={"center"}
                                   style={{flexGrow: this.state.CRCP, backgroundColor: '#F2F2F2'}}>
-                                <Grid xs item>CRCP</Grid>
+                                <Grid xs item>CRCP Overlay</Grid>
                                 <Grid xs item>Thickness</Grid>
                                 {/*<Grid xs item>{this.state.CRCP}''</Grid>*/}
-                                <Grid xs item>{this.props.AnalysisSlabThickness}''</Grid>
+                                <Grid xs item>{this.props.AnalysisSlabThickness}cm</Grid>
                             </Grid>
                            {this.props.data.BaseType==='CTB'?<Grid className={classes.layerHolder} container alignContent={"center"}
                                   style={{flexGrow: this.state.BondBreaker, backgroundColor: '#404040', color:'white'}}>
                                 <Grid xs item>Bond Breaker</Grid>
                                 <Grid xs item>Thickness</Grid>
-                                <Grid xs item>≥{this.state.BondBreaker}''</Grid>
+                                <Grid xs item>≥{this.state.BondBreaker}cm</Grid>
                             </Grid>:''}
                             <Grid container alignContent={"center"}
                                   style={{flexGrow: this.props.data.JCPC, backgroundColor: '#D9D9D9'}}>
                                 <Grid className={classes.layerHolder} container>
-                                    <Grid xs item>JCPC</Grid>
+                                    <Grid xs item>JCPC after Milling</Grid>
                                     <Grid xs item>Thickness</Grid>
-                                    <Grid xs item>{this.props.data.JCPC}''</Grid>
+                                    <Grid xs item>{this.props.data.JCPC}cm</Grid>
                                 </Grid>
                             </Grid>
                             <Grid container alignContent={"center"}
@@ -260,7 +254,7 @@ class Report extends Component {
                                 <Grid className={classes.layerHolder} container>
                                     <Grid xs item>Base</Grid>
                                     <Grid xs item>Thickness</Grid>
-                                    <Grid xs item>{this.props.data.BaseThickness}''</Grid>
+                                    <Grid xs item>{this.props.data.BaseThickness}cm</Grid>
                                 </Grid>
                             </Grid>
                             <Grid container alignContent={"center"}
