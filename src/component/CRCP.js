@@ -23,6 +23,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import PublishIcon from '@material-ui/icons/Publish';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
 import Image from 'material-ui-image';
@@ -196,12 +197,15 @@ class CRCP extends Component {
             _data.forEach(r=>{
                 ksTable.set(''+r['Subgrade K-Value (psi/in.)']+' '+r['Base Thickness (in.)']+' '+r['Modulus of Base Layer (ksi)'],+r['Composite K (psi/in.)']);
             })
+            init.ksTable = ksTable;
             this.setState({ksTable})
         })
         d3.csv(sTable).then(_data=>{
+            init.ssTable = _data;
             this.setState({ssTable:_data})
         })
         d3.csv(temperature).then(_data=>{
+            init.temperature = _data;
             this.setState({temperature:_data})
         })
         this.handlePlasticityIndex(this.state.PlasticityIndex);
@@ -680,7 +684,7 @@ class CRCP extends Component {
         }
         return (<Container maxWidth="lg"> <Paper elevation={3}>
             <Grid container>
-            <Grid item xs={this.state.finished?2:12}>
+            <Grid item style={{maxWidth: this.state.finished ? '220px' : '100%'}}>
             <Stepper activeStep={this.state.activeStep} orientation="vertical">
                 <Step>
                     <StepLabel>Step 1</StepLabel>
@@ -1123,23 +1127,23 @@ class CRCP extends Component {
                         >
                             Print
                         </Button>
+                        {/*<Button*/}
+                        {/*    variant="contained"*/}
+                        {/*    color="primary"*/}
+                        {/*    size="small"*/}
+                        {/*    className={classes.button}*/}
+                        {/*    startIcon={<SaveIcon/>}*/}
+                        {/*    // onClick={()=>this.props.print(this.state)}*/}
+                        {/*    onClick={this.onSaveInput}*/}
+                        {/*>*/}
+                        {/*    Save input*/}
+                        {/*</Button>*/}
                         <Button
                             variant="contained"
                             color="primary"
                             size="small"
                             className={classes.button}
-                            startIcon={<SaveIcon/>}
-                            // onClick={()=>this.props.print(this.state)}
-                            onClick={this.onSaveInput}
-                        >
-                            Save input
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            className={classes.button}
-                            // startIcon={<PrintIcon/>}
+                            startIcon={<ShowChartIcon/>}
                             // onClick={()=>this.props.print(this.state)}
                             onClick={()=>this.setState({openAnalytics:true})}
                         >
@@ -1158,7 +1162,7 @@ class CRCP extends Component {
                 </>
             )}
             </Grid>
-                {this.state.finished ?<Grid xs={10} item>
+                {this.state.finished ?<Grid style={{width: 'calc(100% - 220px)'}} item>
                     <Report
                         data={this.state}
                         AnalysisPunchouts={this.props.AnalysisPunchouts()}
@@ -1214,11 +1218,7 @@ class CRCP extends Component {
                 onClose={()=>this.setState({openAnalytics:false})}>
                 <DialogTitle id="responsive-dialog-title" onClose={()=>this.setState({openAnalytics:false})}>Analysis</DialogTitle>
                 <DialogContent>
-                {this.state.finished ? <Graph
-                    rows={this.state.rows}
-                    AnalysisPunchouts={this.props.AnalysisPunchouts}
-                    init={this.state.activeStep === this.state.stepsLength}
-                    parameter={{...this.state}}/> : ''}
+                Result is not available
                 </DialogContent>
             </Dialog>
             <Popper
