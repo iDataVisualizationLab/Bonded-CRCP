@@ -3,16 +3,19 @@ import React from "react";
 
 
 export default function ComtrolwithSlider(props){
-    const {classes,title,value,setValue,id,min,textField,max,step,...other} = props;
+    let {classes,title,value,setValue,disabled,id,min,textField,max,step,...other} = props;
+    step = step??1;
     const handleChangeSliderInput = (event) => {
         setValue(event.target.value === '' ? '' : Number(event.target.value));
     };
     const handleBlurSliderInput = (min, max) => {
+        value = Math.round(value/step)*step;
         if (value < min) {
             setValue(min);
         } else if (value > max) {
             setValue(max);
         }
+        setValue(value)
     }
     return <>
         <Grid item xs={8} justify="flex-start">

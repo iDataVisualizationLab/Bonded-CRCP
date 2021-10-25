@@ -66,7 +66,7 @@ Object.keys(regions).forEach(key => {
 });
 const highway = ["IH 45", "US 290", "IH 30", "US 59", "IH 35W", "IH 820", "IH 10", "IH 40", "IH 35", "US 287", "US 81", "IH 27", "SL 289", "SH 226", "SH 36", "US 83B", "VA", "FM 3129", "IH 20", "US 71", "US 79", "US 47", "US 67", "BU90-Y", "CS", "FM 1960", "FM 364", "FM 365", "SH 347", "SH 105", "SH 12", "SH 124", "SH 146", "SH 326", "SH 61", "SH 73", "SH 87", "SS 380", "US 90", "US 69", "US 96", "BS6-R", "SH 21", "BW 8", "US 83", "BS 121H", "FM 1171", "FM 1382", "FM 2499", "FM 709", "FM 740", "IH 35E", "IH4 5", "IH 635", "LP 12", "LP 354", "MH", "SH 289", "SH 31", "SH 66", "SH 78", "SH 114", "SH 121", "SH 161", "SH 180", "SH 183", "SH 310", "SH 34", "SH 342", "SH 356", "SL 12", "SL 288", "SP 244", "SP 348", "SP 366", "SPUR 354", "US 175", "US 380", "US 75", "US 77", "US 377", "US 80", "US 54", "BU 287P", "FM 157", "IH 820 ", "SH 199", "SH 26", "SH 360", "FM 1764", "FM 523", "FM 1092", "FM 1488", "FM 518", "IH 610", "SH 288", "SH 332", "SH 225", "SH 242", "SH 249", "SH 35", "US 90A", "IH27", "SH 7", "FM 1472", "LP 20", "ODA 181-1", "ODA 181-2", "ODA 250-1", "ODA 250-2", "US 82", "SH 6", "FM 85", "LP 281", "LP 323", "SH 19", "SH 198", "SH 334", "US 259", "US 281", "FM 1695", "FM 3476", "FM 933", "IH 36", "LP 363", "SH 195", "US 84", "BU 287J", "IH 44", "SH 240", "SP 1027 ", "US 287 ", "US 55", "US 70", "SH 71"];
 // const baseType = ["CTB", "HMA Base"];
-const soilClassSub = ["GW","GP","GM","GC","SW","SP","SM","SC","ML","CL","OL","MH","CH","OH","Pt"];
+const soilClassSub = ["GW","GP","GM","GC","SW","SP","SM","SC","ML","CL","OL","MH","CH","OH"];
 
 const styles = theme => ({
     root: {
@@ -119,6 +119,9 @@ const styles = theme => ({
             '-webkit-appearance': 'none',
             margin: 0,
         }
+    },
+    Info: {
+        pointerEvents: 'all'
     }
 });
 
@@ -155,7 +158,7 @@ const init = {
     BaseThickness: 15,
     BaseThicknessMin: 10,
     BaseThicknessMax: 20,
-    ModulusBase : 400,
+    ModulusBase : 15000,
     CompositeK: 539,
     Area: null,
     Region: null,
@@ -183,9 +186,9 @@ class CRCP extends Component {
         this.state = {...init};
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        // if ((prevState.ModulusBase!==this.state.ModulusBase)||(prevState.SoilSub!==this.state.SoilSub)||(prevState.BaseThickness!==this.state.BaseThickness)){
-        //     this.calculateCompositeK();
-        // }
+        if ((prevState.ModulusBase!==this.state.ModulusBase)||(prevState.SoilSub!==this.state.SoilSub)||(prevState.BaseThickness!==this.state.BaseThickness)){
+            this.calculateCompositeK();
+        }
     }
 
     componentDidMount() {
@@ -209,6 +212,7 @@ class CRCP extends Component {
             this.setState({temperature:_data})
         })
         this.handlePlasticityIndex(this.state.PlasticityIndex);
+        this.calculateCompositeK();
     }
     computeStress = (SlabThickness)=>{ // F7
         let input = {
@@ -222,7 +226,7 @@ class CRCP extends Component {
             'STR': {Input:0},
             'MR Inp': {Input:this.state.ModulusOfRupture,"L Bound":0},
         }
-        debugger
+
         let B3 = input.H1.Input;
         input.H1["L Bound"] = (B3>25)?25:((B3>30)?30:35);
         input.H1["H Bound"] = (B3<=25)?25:((B3<=30)?30:35);
@@ -248,8 +252,7 @@ class CRCP extends Component {
             const D2 = +s["Thickness of CRCP Overlay"];
             const E2 = s["ID"];
             const F2 = +s["max ESALs"];
-
-            const G2 = Math.round((input['MR Des'].Input/Math.pow((F2/48)/225000,0.25) )*100)/100;// stress
+            const G2 = Math.round((input['MR Des'].Input/Math.pow((F2*1000000/48)/225000,0.25) )*100)/100;// stress
             mapSSTable[E2] = {A2,B2,C2,D2,E2,F2,G2};
         });
 
@@ -296,7 +299,7 @@ class CRCP extends Component {
                     const T2 = data3[i].STR;
                     const T8 = data3[jump2 + i].STR;
                     const X2 = H1;
-                    const ESALs =((S2-S8)*X2+(S8*P2-P8*S2))/(P2-P8);
+                    const ESALs =Math.round(((S2-S8)*X2+(S8*P2-P8*S2))/(P2-P8))//((S2-S8)*X2+(S8*P2-P8*S2))/(P2-P8);
                     const STR = ((T2-T8)*X2+(T8*P2-P8*T2))/(P2-P8);
                     const ID = `${Region}${H1}${Comp_K}${ESALs}`;
                     const LN = Math.log(ESALs);
@@ -329,7 +332,7 @@ class CRCP extends Component {
 
         const _lookup = data4.find(d=>d.ID===data5.ID);
         data5.H2 = Math.round(((_lookup??{H2:((Math.log(data5['Input_ESALs']))-X19)/W19}).H2+input['MR Inp']['L Bound'])*10)/10;
-
+        // console.log(input,data2,data3,data4,data5)
         return data5.H2;
     }
     recompute = ()=>{
@@ -592,12 +595,14 @@ class CRCP extends Component {
             SubbaseThicknessThreshHold = 8;
         }
         this.setState({PlasticityIndex:value,SubbaseTypeOpt,SubbaseThicknessThreshHold});
-        this.handleBaseType(this.state.BaseType);
     };
     calculateCompositeK = ()=>{
-        const {ModulusBase,SoilSub,BaseThickness,ksTable} = this.state;
-        debugger
-        this.setState({CompositeK: ksTable.get(''+getSubgradeValue(SoilSub)+' '+Math.round(BaseThickness)+' '+getModulusBase(ModulusBase))});
+        let {ModulusBase,SoilSub,BaseThickness,ksTable} = this.state;
+        ModulusBase = ModulusBase*0.14503773800722// convert
+        const E8 = (0.81371*getSubgradeValue(SoilSub)+538.756*Math.round(BaseThickness/2.54)+ 1.05349*getModulusBase(ModulusBase)-2441.9);
+        const CompositeK = Math.round((E8/145.03773800722/0.0254>500)?500:((E8/145.03773800722/0.0254<100)?100:(E8/145.03773800722/0.0254)));
+        // this.setState({CompositeK: ksTable.get(''+getSubgradeValue(SoilSub)+' '+Math.round(BaseThickness)+' '+getModulusBase(ModulusBase))});
+        this.setState({CompositeK});
 
         function getSubgradeValue(SoilSub){
             switch (SoilSub) {
@@ -718,7 +723,7 @@ class CRCP extends Component {
                                             error={!this.state.Region}
                                             label={<>Region<IconButton
                                                 aria-label="info"
-                                                className={classes.margin}
+                                                className={classes.margin+' '+classes.Info}
                                                 size="small">
                                                 <InfoIcon fontSize="small"
                                                           onClick={this.handleOpenHelper({src: RegionPic},true)}
@@ -743,15 +748,7 @@ class CRCP extends Component {
                                                    }}
                                                    size="small"
                                                    style={{marginTop: 8, marginBottom: 4}}
-                                                   label={<>Location<IconButton
-                                                       aria-label="info"
-                                                       className={classes.margin}
-                                                       size="small">
-                                                       <InfoIcon fontSize="small"
-                                                                 onClick={this.handleOpenHelper({src: AreaPic},true)}
-                                                                 onMouseEnter={this.handleOpenHelper({src: AreaPic})}
-                                                                 onMouseLeave={this.handleCloseHelper}
-                                                       /></IconButton></>}
+                                                   label={<>Location</>}
                                                    variant="filled"/>
                                     </Grid>
                                     <Grid item xs={12} sm={6} md={3}>
@@ -955,6 +952,7 @@ class CRCP extends Component {
                                                 defaultValue={5}
                                                 min={1} max={10}
                                                 id="PunchoutsPerMile"
+                                                disabled
                                             />
                                         </Grid>
                                         <Hidden smDown>
@@ -972,6 +970,7 @@ class CRCP extends Component {
                                                         max: 10,
                                                         type: 'number',
                                                     }}
+                                                    disabled
                                                 />
                                             </Grid>
                                         </Hidden>
@@ -1046,6 +1045,7 @@ class CRCP extends Component {
                                                 id="SoilSub"
                                                 options={soilClassSub}
                                                 size="small"
+                                                value={this.state.SoilSub}
                                                 onChange={(event, value) => this.handleSoilSub(value)}
                                                 renderInput={(params) => <TextField dense {...params} label=""/>}/>
                                         </Grid>
@@ -1053,7 +1053,7 @@ class CRCP extends Component {
                                 </Grid>
                                 <Grid container item xs={12} spacing={1} alignItems="flex-end" justify="center">
                                     <Grid item xs={12} justify="flex-start">
-                                        <Typography variant={'h6'}>Base layer information</Typography>
+                                        <Typography variant={'h6'}>Base Layer Information</Typography>
                                     </Grid>
                                     <Grid container item xs={11} md={10} lg={8} spacing={1} justify="center"
                                           alignItems="flex-end">
@@ -1062,7 +1062,7 @@ class CRCP extends Component {
                                             classes={classes}
                                             value={this.state.BaseThickness}
                                             setValue={(v)=>this.setState({BaseThickness:v})}
-                                            step={0.01}
+                                            step={1}
                                             min={this.state.BaseThicknessMin} max={this.state.BaseThicknessMax}
                                             error={this.errorFunc.Step3.BaseThickness()}
                                             helperText={this.errorFunc.Step3.BaseThickness()}
@@ -1075,7 +1075,7 @@ class CRCP extends Component {
                                             classes={classes}
                                             value={this.state.ModulusBase}
                                             setValue={(v)=>this.setState({ModulusBase:v})}
-                                            min={15000} max={30000}
+                                            min={350} max={20000}
                                             error={this.errorFunc.Step3.BaseThickness()}
                                             helperText={this.errorFunc.Step3.BaseThickness()}
                                         />
@@ -1089,7 +1089,7 @@ class CRCP extends Component {
                                             <TextField type="number" id="CompositeK " value={this.state.CompositeK}
                                                        onChange={(event)=>this.setState({CompositeK:+event.target.value})}
                                                        InputProps={{inputProps:{
-                                                           className: classes.hideArrow
+                                                           className: classes.hideArrow,
                                                        }}}
                                                        />
                                         </Grid>

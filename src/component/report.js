@@ -218,12 +218,12 @@ class Report extends Component {
                         <Grid item xs={4} className={classes.underline} style={{color:(this.props.AnalysisSlabThickness>13)?'red':null}}>
                             {this.props.AnalysisSlabThickness}
                         </Grid>
-                        <Grid item xs={8} className={classes.underline}>
-                            Number of Punchouts per Km
-                        </Grid>
-                        <Grid item xs={4} className={classes.underline} style={{color:(this.props.AnalysisPunchouts>this.props.data.PunchoutsPerMile)?'red':null}}>
-                            {this.props.AnalysisPunchouts ? this.props.AnalysisPunchouts.toFixed(2) : ''}
-                        </Grid>
+                        {/*<Grid item xs={8} className={classes.underline}>*/}
+                        {/*    Number of Punchouts per Km*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={4} className={classes.underline} style={{color:(this.props.AnalysisPunchouts>this.props.data.PunchoutsPerMile)?'red':null}}>*/}
+                        {/*    {this.props.AnalysisPunchouts ? this.props.AnalysisPunchouts.toFixed(2) : ''}*/}
+                        {/*</Grid>*/}
                         <Grid item xs={12}>
                             <Typography variant={'h6'} className={classes.subHeader}> G. Layer Information</Typography>
                         </Grid>
