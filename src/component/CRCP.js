@@ -45,10 +45,10 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import * as d3 from "d3";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import sTable from "./data/sTable.csv";
-// import stress from "./data/stress.csv";
-import kTable from "./data/kTable.csv";
-import temperature from "./data/temperature.csv";
+import XLSX from 'xlsx';
+import excelFile from './data/KICT Design Program Working File_v20211013.xlsm'
+
+
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider/Divider";
 import Region from "./County";
@@ -192,24 +192,16 @@ class CRCP extends Component {
     }
 
     componentDidMount() {
-        // d3.tsv(stress).then(data_=> {
-        //     this.setState({data: data_});
-        // });
-        d3.csv(kTable).then(_data=>{
-            let ksTable = new Map();
-            _data.forEach(r=>{
-                ksTable.set(''+r['Subgrade K-Value (psi/in.)']+' '+r['Base Thickness (in.)']+' '+r['Modulus of Base Layer (ksi)'],+r['Composite K (psi/in.)']);
-            })
-            init.ksTable = ksTable;
-            this.setState({ksTable})
-        })
-        d3.csv(sTable).then(_data=>{
-            init.ssTable = _data;
-            this.setState({ssTable:_data})
-        })
-        d3.csv(temperature).then(_data=>{
-            init.temperature = _data;
-            this.setState({temperature:_data})
+        fetch(excelFile).then(res => res.arrayBuffer()).then(ab => {
+            const wb = XLSX.read(ab, {type: "array"});
+
+            const temperatureSheet = wb.Sheets['Temperature'];
+            init.temperature = XLSX.utils.sheet_to_json(temperatureSheet);
+
+            const sTableSheet = wb.Sheets['S-Table'];
+            init.ssTable = XLSX.utils.sheet_to_json(sTableSheet);
+
+            this.setState({temperature:init.temperature,ssTable:init.ssTable})
         })
         this.handlePlasticityIndex(this.state.PlasticityIndex);
         this.calculateCompositeK();
@@ -597,7 +589,7 @@ class CRCP extends Component {
         this.setState({PlasticityIndex:value,SubbaseTypeOpt,SubbaseThicknessThreshHold});
     };
     calculateCompositeK = ()=>{
-        let {ModulusBase,SoilSub,BaseThickness,ksTable} = this.state;
+        let {ModulusBase,SoilSub,BaseThickness} = this.state;
         ModulusBase = ModulusBase*0.14503773800722// convert
         const E8 = (0.81371*getSubgradeValue(SoilSub)+538.756*Math.round(BaseThickness/2.54)+ 1.05349*getModulusBase(ModulusBase)-2441.9);
         const CompositeK = Math.round((E8/145.03773800722/0.0254>500)?500:((E8/145.03773800722/0.0254<100)?100:(E8/145.03773800722/0.0254)));
