@@ -52,5 +52,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "./"
+  "homepage": "./",
+  "devDependencies": {
+    "electron": "^15.3.0"
+  }
 }
