@@ -1,7 +1,19 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
+const isDev = require("electron-is-dev");
+// Conditionally include the dev tools installer to load React Dev Tools
+let installExtension, REACT_DEVELOPER_TOOLS; // NEW!
 
+if (isDev) {
+    const devTools = require("electron-devtools-installer");
+    installExtension = devTools.default;
+    REACT_DEVELOPER_TOOLS = devTools.REACT_DEVELOPER_TOOLS;
+} // NEW!
+// Handle creating/removing shortcuts on Windows when installing/uninstalling
+if (require("electron-squirrel-startup")) {
+    app.quit();
+} // NEW!
 function createWindow () {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -11,12 +23,18 @@ function createWindow () {
             preload: path.join(__dirname, 'preload.js')
         }
     })
-
+    mainWindow.setMenu(null)
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
+    mainWindow.loadURL(
+        isDev
+            ? "http://localhost:3000"
+            : `file://${path.join(__dirname, "../build/index.html")}`
+    );
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    if (isDev) {
+        win.webContents.openDevTools({ mode: "detach" });
+    }
 }
 
 // This method will be called when Electron has finished
@@ -24,7 +42,11 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     createWindow()
-
+    if (isDev) {
+        installExtension(REACT_DEVELOPER_TOOLS)
+            .then(name => console.log(`Added Extension:  ${name}`))
+            .catch(error => console.log(`An error occurred: , ${error}`));
+    }
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
