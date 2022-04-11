@@ -33,7 +33,7 @@ function createWindow () {
 
     // Open the DevTools.
     if (isDev) {
-        win.webContents.openDevTools({ mode: "detach" });
+        mainWindow.webContents.openDevTools({ mode: "detach" });
     }
 }
 
